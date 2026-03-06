@@ -90,6 +90,17 @@
       min-height: 100vh;
     }
 
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    h1, h2, h3, h4 {
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
     /* Scrollbar */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--bg-primary); }
@@ -1721,9 +1732,9 @@
       .about__text  { max-width: 100%; }
 
       .why__inner   { grid-template-columns: 1fr; gap: var(--space-2xl); }
-      .why__right   { height: 380px; }
-      .why__photo--main   { width: 220px; height: 300px; left: 0; }
-      .why__photo--accent { width: 180px; height: 230px; right: 0; bottom: 0; }
+      .why__right   { height: 360px; }
+      .why__photo--main   { width: 200px; height: 280px; left: 0; top: 0; }
+      .why__photo--accent { width: 160px; height: 210px; right: 0; bottom: 0; }
       .why__photo--small  { display: none; }
 
       .appt__inner  { grid-template-columns: 1fr; gap: var(--space-2xl); }
@@ -1736,12 +1747,13 @@
       .navbar__nav, .navbar__actions { display: none; }
       .navbar__hamburger { display: flex; }
 
-      /* Hero */
-      .hero { padding: 0 var(--space-lg); }
+      /* Mobile menu — matches navbar height */
+      .mobile-menu { top: 64px; padding: var(--space-lg) var(--space-lg); }
+      .hero { padding: 0 var(--space-lg); padding-top: 64px; }
       .hero__inner {
         grid-template-columns: 1fr;
-        gap: var(--space-2xl);
-        padding: calc(var(--space-3xl) - 1rem) 0;
+        gap: var(--space-xl);
+        padding: var(--space-2xl) 0;
       }
       .hero__left { max-width: 100%; text-align: center; align-items: center; }
       .hero__headline { font-size: clamp(2.2rem, 8vw, 3rem); }
@@ -1749,21 +1761,24 @@
       .hero__buttons  { justify-content: center; flex-direction: column; width: 100%; }
       .hero__buttons .btn-primary,
       .hero__buttons .btn-secondary { width: 100%; text-align: center; font-size: 0.8rem; padding: 15px 24px; }
-      .hero__info-row { justify-content: center; }
+      .hero__info-row { justify-content: center; flex-wrap: wrap; }
       .hero__info-item { padding: 0 var(--space-md); align-items: center; }
-      .hero__right { width: 100%; }
-      .hero__image-frame { width: min(100%, 92vw); height: 320px; }
+      .hero__right { width: 100%; display: flex; justify-content: center; }
+      /* Use 100% not vw — parent padding already constrains it */
+      .hero__image-frame { width: 100%; max-width: 460px; height: 300px; }
 
-      /* Sections */
+      /* Sections — uniform horizontal padding */
       .about { padding: var(--space-2xl) var(--space-lg); }
       .why   { padding: var(--space-2xl) var(--space-lg); }
-      .why__right { height: 320px; }
-      .why__photo--main   { width: 190px; height: 260px; }
-      .why__photo--accent { width: 155px; height: 200px; }
       .appt  { padding: var(--space-2xl) var(--space-lg); }
       .appt__map-wrap { height: 220px; }
 
-      /* ---- Centre all headings / labels on mobile ---- */
+      /* Why collage — fix within bounded container */
+      .why__right { height: 300px; overflow: hidden; }
+      .why__photo--main   { width: 170px; height: 240px; left: 0; top: 0; }
+      .why__photo--accent { width: 140px; height: 185px; right: 0; bottom: 0; }
+
+      /* ---- Centre all section text on mobile ---- */
       .about__left,
       .about__right,
       .why__left,
@@ -1775,7 +1790,6 @@
       .about__since,
       .about__heading,
       .about__text,
-      .about__divider,
       .pricing__label,
       .pricing__heading,
       .pricing__note,
@@ -1784,54 +1798,31 @@
       .why__sub,
       .appt__eyebrow,
       .appt__heading,
-      .appt__sub {
-        text-align: center;
-      }
+      .appt__sub { text-align: center; }
 
-      /* Divider + eyebrow ::before lines stay centred */
       .about__since,
       .why__eyebrow,
-      .appt__eyebrow {
-        justify-content: center;
-      }
+      .appt__eyebrow { justify-content: center; }
 
-      .about__divider {
-        align-self: center;
-      }
+      .about__divider { align-self: center; }
+      .pricing__list  { width: 100%; }
+      .why__features  { width: 100%; }
 
-      /* Pricing items keep their layout but centre the block */
-      .pricing__list {
-        width: 100%;
-      }
-
-      /* Why features centre icon+text */
-      .why__features {
-        width: 100%;
-      }
-
-      /* Appt contacts full width */
       .appt__contacts,
-      .appt__cta {
-        width: 100%;
-        align-items: center;
-      }
-
+      .appt__cta { width: 100%; align-items: center; }
       .appt__cta .btn-primary,
-      .appt__cta .btn {
-        width: 100%;
-        text-align: center;
-      }
+      .appt__cta .btn { width: 100%; text-align: center; }
     }
 
     /* -- 480px: small phones -- */
     @media (max-width: 480px) {
       .navbar { padding: 0 var(--space-md); height: 58px; }
-
-      .hero { padding: 0 var(--space-md); }
+      .mobile-menu { top: 58px; padding: var(--space-md) var(--space-md); }
+      .hero { padding: 0 var(--space-md); padding-top: 58px; }
       .hero__headline { font-size: clamp(1.9rem, 8.5vw, 2.5rem); }
       .hero__eyebrow  { font-size: 0.58rem; }
-      .hero__image-frame { height: 270px; }
-      .hero__info-row { flex-wrap: wrap; gap: var(--space-sm); }
+      .hero__image-frame { height: 260px; }
+      .hero__info-row { gap: var(--space-sm); }
       .hero__info-item { padding: 4px var(--space-sm); }
 
       .about { padding: var(--space-xl) var(--space-md); }
@@ -1842,9 +1833,9 @@
       .pricing__item-num { font-size: 0.85rem; }
 
       .why { padding: var(--space-xl) var(--space-md); }
-      .why__right { height: 280px; }
-      .why__photo--main   { width: 160px; height: 220px; }
-      .why__photo--accent { width: 130px; height: 170px; }
+      .why__right { height: 260px; }
+      .why__photo--main   { width: 145px; height: 200px; }
+      .why__photo--accent { width: 120px; height: 160px; }
       .why__quote { padding: 20px 18px; }
 
       .appt { padding: var(--space-xl) var(--space-md); }
@@ -1861,15 +1852,17 @@
 
     /* -- 360px: smallest phones -- */
     @media (max-width: 360px) {
+      .hero { padding: 0 12px; padding-top: 58px; }
       .hero__headline { font-size: 1.75rem; }
-      .hero__image-frame { height: 240px; }
+      .hero__image-frame { height: 230px; }
       .hero__buttons .btn-primary,
       .hero__buttons .btn-secondary { font-size: 0.75rem; padding: 13px 16px; }
 
-      .why__photo--main   { width: 140px; height: 190px; }
-      .why__photo--accent { width: 110px; height: 150px; }
+      .why__right { height: 230px; }
+      .why__photo--main   { width: 125px; height: 175px; }
+      .why__photo--accent { width: 105px; height: 140px; }
 
-      .appt__contact { padding: 14px 14px; }
+      .appt__contact { padding: 14px 12px; }
       .footer__legal { gap: 14px; flex-wrap: wrap; }
     }
   </style>
