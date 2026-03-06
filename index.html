@@ -1,1662 +1,2651 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fadezstudio - Babrbershop</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #ffffff;
-            color: #1a1a1a;
-            line-height: 1.6;
-            scroll-behavior: smooth;
-        }
-
-        :root {
-            --reveal-duration: 0.8s;
-            --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        @keyframes navDrop {
-            from {
-                opacity: 0;
-                transform: translateY(-18px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(28px) scale(0.985);
-            filter: blur(2px);
-            transition: opacity var(--reveal-duration) var(--reveal-ease), transform var(--reveal-duration) var(--reveal-ease), filter var(--reveal-duration) var(--reveal-ease);
-            transition-delay: var(--delay, 0ms);
-            will-change: transform, opacity, filter;
-        }
-
-        .reveal.is-visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            filter: blur(0);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .reveal,
-            .reveal.is-visible {
-                opacity: 1 !important;
-                transform: none !important;
-                filter: none !important;
-                transition: none !important;
-                animation: none !important;
-            }
-        }
-
-        /* ===== NAVBAR ===== */
-        nav {
-            background-color: #000000;
-            padding: 1.8rem 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid #1a1a1a;
-            backdrop-filter: blur(10px);
-            animation: navDrop 0.65s ease-out;
-        }
-
-        .navbar-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            height: 50px;
-            display: flex;
-            align-items: center;
-            overflow: visible;
-        }
-
-        .logo img {
-            max-height: 100%;
-            max-width: 150px;
-            object-fit: contain;
-            opacity: 0.85;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2.5rem;
-            align-items: center;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #d0d0d0;
-            font-size: 0.9rem;
-            font-weight: 500;
-            position: relative;
-            transition: all 0.3s ease;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-menu a:hover {
-            color: #ffffff;
-        }
-
-        .nav-menu a::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background-color: #b0b0b0;
-            transition: width 0.3s ease;
-        }
-
-        .nav-menu a:hover::after {
-            width: 100%;
-        }
-
-        .cta-btn {
-            background-color: #ffffff;
-            color: #000000 !important;
-            padding: 0.8rem 2rem;
-            border-radius: 1px;
-            font-weight: 600;
-            cursor: pointer;
-            border: 2px solid #ffffff;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .cta-btn:hover {
-            background-color: transparent;
-            color: #ffffff !important;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-        }
-
-        /* ===== HAMBURGER MENU ===== */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 5px;
-            z-index: 101;
-        }
-
-        .hamburger span {
-            width: 28px;
-            height: 3px;
-            background-color: #ffffff;
-            transition: all 0.3s ease;
-            border-radius: 2px;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(8px, -8px);
-        }
-
-        /* ===== HERO SECTION ===== */
-        .hero {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
-            padding: 3rem 2rem 6rem;
-            min-height: 80vh;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(128, 128, 128, 0.08) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: -10%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(0, 0, 0, 0.04) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 10s ease-in-out infinite reverse;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(40px);
-            }
-        }
-
-        .hero-container {
-            max-width: 1200px;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-content {
-            max-width: 620px;
-        }
-
-        .hero-content h1 {
-            font-size: 4.2rem;
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            color: #000000;
-            letter-spacing: -2px;
-            text-transform: uppercase;
-            text-wrap: balance;
-        }
-
-        .hero-content h1 .highlight {
-            color: #808080;
-            font-weight: 300;
-            letter-spacing: -1px;
-        }
-
-        .hero-content p {
-            font-size: 1.15rem;
-            color: #555555;
-            margin-bottom: 2.4rem;
-            line-height: 1.8;
-            letter-spacing: 0.3px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-            margin-bottom: 0;
-        }
-
-        .hero-buttons a {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #000000 0%, #232323 100%);
-            color: #ffffff;
-            padding: 1.1rem 3rem;
-            border: 1px solid #000000;
-            border-radius: 1px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            text-decoration: none;
-            display: inline-block;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
-        }
-
-        .btn-primary:hover {
-            background: #ffffff;
-            color: #000000;
-            transform: translateY(-3px);
-            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.24);
-        }
-
-        .btn-secondary {
-            background-color: rgba(255, 255, 255, 0.82);
-            color: #000000;
-            padding: 1.1rem 3rem;
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            border-radius: 1px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            text-decoration: none;
-            display: inline-block;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            backdrop-filter: blur(6px);
-        }
-
-        .btn-secondary:hover {
-            background-color: #ffffff;
-            color: #000000;
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.16);
-        }
-
-        .hero-buttons a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -130%;
-            width: 70%;
-            height: 100%;
-            background: linear-gradient(100deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.28) 55%, rgba(255, 255, 255, 0) 100%);
-            transform: skewX(-20deg);
-            transition: left 0.7s ease;
-        }
-
-        .hero-buttons a:hover::before {
-            left: 145%;
-        }
-
-        @keyframes gloss-shine {
-            0% {
-                left: -150%;
-            }
-            100% {
-                left: 170%;
-            }
-        }
-
-        .hero-image {
-            position: relative;
-            height: 400px;
-            perspective: 1200px;
-            overflow: visible;
-        }
-
-        .hero-image::after {
-            content: '';
-            position: absolute;
-            left: 8%;
-            right: 8%;
-            bottom: -20px;
-            height: 28px;
-            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.32) 0%, rgba(0, 0, 0, 0.14) 45%, rgba(0, 0, 0, 0) 80%);
-            filter: blur(6px);
-            z-index: 0;
-        }
-
-        .hero-image-frame {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 1px;
-            overflow: hidden;
-            transform: none;
-            transform-origin: center;
-            transition: transform 0.45s ease, box-shadow 0.45s ease;
-            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
-            z-index: 1;
-            background: #111111;
-        }
-
-        .hero-image-frame::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -150%;
-            width: 65%;
-            height: 100%;
-            background: linear-gradient(105deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.08) 35%, rgba(255, 255, 255, 0.45) 50%, rgba(255, 255, 255, 0.08) 65%, rgba(255, 255, 255, 0) 100%);
-            transform: skewX(-18deg);
-            animation: gloss-shine 3.6s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .hero-image-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 1px;
-            position: relative;
-            display: block;
-            z-index: 1;
-        }
-
-        .hero-image:hover .hero-image-frame {
-            transform: translateY(-2px);
-            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.26);
-        }
-
-        /* ===== ABOUT SECTION ===== */
-        .about {
-            background: linear-gradient(180deg, #ffffff 0%, #f9f9f9 100%);
-            padding: 8rem 2rem;
-            position: relative;
-        }
-
-        .about::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
-        }
-
-        .about-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .about-header {
-            text-align: center;
-            margin-bottom: 5rem;
-        }
-
-        .about-year {
-            font-size: 0.85rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            color: #808080;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            animation: fadeInDown 0.8s ease-out;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .about-title {
-            font-size: 3.2rem;
-            font-weight: 700;
-            color: #000000;
-            letter-spacing: -1.5px;
-            margin-bottom: 0;
-            animation: fadeInDown 0.8s ease-out 0.1s both;
-        }
-
-        .about-content {
-            max-width: 900px;
-            margin: 0 auto 4rem;
-        }
-
-        .about-text {
-            font-size: 1.1rem;
-            color: #4a4a4a;
-            line-height: 1.95;
-            letter-spacing: 0.4px;
-            text-align: center;
-            margin-bottom: 0;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-            padding: 0;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .about-text p {
-            margin-bottom: 0;
-        }
-
-        .pricing-section {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            padding: 4rem 3.5rem;
-            border-radius: 2px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 0.8s ease-out 0.3s both;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .pricing-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #c0c0c0;
-            letter-spacing: 3px;
-            margin-bottom: 3rem;
-            text-transform: uppercase;
-            text-align: center;
-            position: relative;
-            padding-bottom: 1.5rem;
-        }
-
-        .pricing-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-        }
-
-        .pricing-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            margin-bottom: 2.5rem;
-        }
-
-        .pricing-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.8rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.3s ease;
-        }
-
-        .pricing-item:hover {
-            padding: 2rem 0;
-            border-bottom-color: rgba(255, 255, 255, 0.15);
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.02), transparent);
-        }
-
-        .pricing-item:last-child {
-            border-bottom: none;
-        }
-
-        .pricing-name {
-            font-size: 1rem;
-            font-weight: 500;
-            color: #e8e8e8;
-            letter-spacing: 0.5px;
-        }
-
-        .pricing-price {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #ffffff;
-            letter-spacing: 0.5px;
-        }
-
-        .pricing-note {
-            font-size: 0.8rem;
-            color: #909090;
-            font-style: italic;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            text-align: center;
-            letter-spacing: 0.3px;
-        }
-
-        /* ===== GALLERY SECTION ===== */
-        .gallery {
-            background: linear-gradient(180deg, #ffffff 0%, #f9f9f9 100%);
-            padding: 8rem 2rem;
-        }
-
-        .gallery-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 5rem;
-            align-items: center;
-        }
-
-        .gallery-images {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: repeat(2, 250px);
-            gap: 1rem;
-        }
-
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .gallery-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .gallery-item:nth-child(1) {
-            grid-row: span 2;
-        }
-
-        .gallery-content {
-            padding: 2rem;
-        }
-
-        .gallery-badge {
-            display: inline-block;
-            font-size: 0.85rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: #808080;
-            text-transform: uppercase;
-            margin-bottom: 2rem;
-        }
-
-        .gallery-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #000000;
-            letter-spacing: -1px;
-            margin-bottom: 2rem;
-            line-height: 1.2;
-        }
-
-        .gallery-review {
-            font-size: 1.1rem;
-            color: #4a4a4a;
-            line-height: 1.8;
-            margin-bottom: 2.5rem;
-            font-style: italic;
-            padding-left: 1.5rem;
-            border-left: 3px solid #000000;
-        }
-
-        .gallery-features {
-            list-style: none;
-            padding: 0;
-        }
-
-        .gallery-features li {
-            font-size: 1rem;
-            color: #1a1a1a;
-            margin-bottom: 1.2rem;
-            padding-left: 2rem;
-            position: relative;
-            letter-spacing: 0.3px;
-        }
-
-        .gallery-features li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #000000;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        /* ===== BOOKING SECTION ===== */
-        .booking {
-            background: #ffffff;
-            padding: 6rem 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .booking::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
-        }
-
-        .booking-container {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .booking-title {
-            font-size: 3rem;
-            font-weight: 700;
-            color: #000000;
-            letter-spacing: -1.5px;
-            margin-bottom: 1.5rem;
-        }
-
-        .booking-subtitle {
-            font-size: 1.1rem;
-            color: #555555;
-            margin-bottom: 3rem;
-            line-height: 1.7;
-        }
-
-        .booking-info {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1rem;
-            margin-bottom: 3rem;
-            text-align: left;
-        }
-
-        .booking-item {
-            text-align: left;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            background: linear-gradient(180deg, #ffffff 0%, #f8f8f8 100%);
-            padding: 1.1rem 1.1rem;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-        }
-
-        .booking-item.hours-item {
-            grid-column: 1 / -1;
-        }
-
-        .booking-label {
-            font-size: 0.78rem;
-            color: #808080;
-            text-transform: uppercase;
-            letter-spacing: 1.4px;
-            margin-bottom: 0.6rem;
-        }
-
-        .booking-value {
-            font-size: 1rem;
-            color: #000000;
-            font-weight: 600;
-            letter-spacing: 0.2px;
-        }
-
-        .booking-hours {
-            font-size: 0.95rem;
-            font-weight: 500;
-            line-height: 1.65;
-            letter-spacing: 0.2px;
-        }
-
-        .booking-hours-list {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.35rem;
-        }
-
-        .booking-hours-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 0.25rem;
-            border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
-            font-size: 0.92rem;
-        }
-
-        .booking-hours-row:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .booking-hours-row span:first-child {
-            color: #555555;
-            font-weight: 500;
-        }
-
-        .booking-hours-row span:last-child {
-            color: #111111;
-            font-weight: 600;
-        }
-
-        .booking-cta {
-            background-color: #000000;
-            color: #ffffff;
-            padding: 1.2rem 3.5rem;
-            border: 2px solid #000000;
-            border-radius: 1px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .booking-cta:hover {
-            background-color: #ffffff;
-            color: #000000;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            transform: translateY(-3px);
-        }
-
-        .booking-map {
-            margin-top: 4rem;
-            width: 100%;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .booking-map iframe {
-            width: 100%;
-            height: 400px;
-            border: none;
-            border-radius: 2px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        /* ===== FOOTER ===== */
-        footer {
-            background-color: #000000;
-            color: #ffffff;
-            padding: 4rem 2rem 2rem;
-            border-top: 1px solid #1a1a1a;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 4rem;
-            margin-bottom: 3rem;
-            padding-bottom: 3rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer-about h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-            color: #ffffff;
-        }
-
-        .footer-logo {
-            height: 50px;
-            margin-bottom: 1rem;
-        }
-
-        .footer-logo img {
-            max-height: 100%;
-            max-width: 150px;
-            object-fit: contain;
-        }
-
-        .footer-about p {
-            font-size: 0.95rem;
-            color: #b0b0b0;
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-social {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .footer-social a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .footer-social a svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-
-        .footer-social a:hover {
-            background-color: #ffffff;
-            color: #000000;
-            border-color: #ffffff;
-        }
-
-        .footer-column h4 {
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            color: #ffffff;
-        }
-
-        .footer-column ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-column ul li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-column ul li a {
-            color: #b0b0b0;
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
-            letter-spacing: 0.3px;
-        }
-
-        .footer-column ul li a:hover {
-            color: #ffffff;
-        }
-
-        .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
-            color: #808080;
-        }
-
-        .footer-bottom a {
-            color: #808080;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-bottom a:hover {
-            color: #ffffff;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 968px) {
-            .hamburger {
-                display: flex;
-            }
-
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 88px;
-                flex-direction: column;
-                background-color: #000000;
-                width: 100%;
-                text-align: center;
-                transition: left 0.3s ease;
-                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.5);
-                padding: 2rem 0;
-                gap: 0;
-                border-top: 1px solid #1a1a1a;
-            }
-
-            .nav-menu.active {
-                left: 0;
-            }
-
-            .nav-menu li {
-                width: 100%;
-                padding: 1rem 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            }
-
-            .nav-menu li:last-child {
-                border-bottom: none;
-                padding: 1.5rem 0;
-            }
-
-            .nav-menu a::after {
-                display: none;
-            }
-
-            .cta-btn {
-                padding: 0.7rem 2rem;
-                font-size: 0.85rem;
-            }
-
-            .hero-container {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-                justify-items: center;
-            }
-
-            .hero-content,
-            .hero-content h1,
-            .hero-content p {
-                text-align: center;
-            }
-
-            .hero-content h1 {
-                font-size: 3rem;
-            }
-
-            .hero-image {
-                height: 350px;
-            }
-
-            .about-header {
-                margin-bottom: 3.5rem;
-            }
-
-            .about-title {
-                font-size: 3rem;
-            }
-
-            .about-content {
-                max-width: 760px;
-            }
-
-            .about-text {
-                padding: 1.8rem 1.8rem;
-            }
-
-            .pricing-section {
-                padding: 3rem 2.5rem;
-            }
-
-            .gallery-container {
-                gap: 3rem;
-            }
-
-            .gallery-title {
-                font-size: 2.2rem;
-            }
-
-            .booking-title {
-                font-size: 2.5rem;
-            }
-
-            .booking-map iframe {
-                height: 350px;
-            }
-
-            .footer-content {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 3rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            nav {
-                padding: 1.2rem 1.5rem;
-            }
-
-            .nav-menu {
-                top: 76px;
-            }
-
-            .hero {
-                padding: 2rem 1.5rem 4rem;
-                min-height: auto;
-            }
-
-            .hero-container {
-                gap: 2.5rem;
-            }
-
-            .hero-content {
-                text-align: center;
-                margin: 0 auto;
-                width: 100%;
-            }
-
-            .hero-content h1,
-            .hero-content p {
-                text-align: center;
-            }
-
-            .hero-content h1 {
-                font-size: 2.5rem;
-                letter-spacing: -1px;
-            }
-
-            .hero-content p {
-                font-size: 1rem;
-                line-height: 1.7;
-                margin-bottom: 2rem;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 1rem;
-            }
-
-            .btn-primary, .btn-secondary {
-                width: 100%;
-                text-align: center;
-                padding: 1rem 1.5rem;
-            }
-
-            .hero-image {
-                height: 300px;
-            }
-
-            .about {
-                padding: 5rem 1.5rem;
-            }
-
-            .about-title {
-                font-size: 2.5rem;
-            }
-
-            .about-content {
-                margin-bottom: 3rem;
-            }
-
-            .about-text {
-                font-size: 1rem;
-                line-height: 1.85;
-            }
-
-            .pricing-section {
-                padding: 2.5rem 2rem;
-            }
-
-            .pricing-grid {
-                gap: 1.5rem;
-            }
-
-            .gallery {
-                padding: 5rem 1.5rem;
-            }
-
-            .gallery-container {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-
-            .gallery-images {
-                grid-template-rows: repeat(2, 200px);
-            }
-
-            .gallery-title {
-                font-size: 2rem;
-            }
-
-            .gallery-content {
-                padding: 0;
-            }
-
-            .booking {
-                padding: 5rem 1.5rem;
-            }
-
-            .booking-title {
-                font-size: 2.2rem;
-            }
-
-            .booking-subtitle {
-                font-size: 1.05rem;
-            }
-
-            .booking-info {
-                grid-template-columns: 1fr;
-                gap: 0.9rem;
-                margin-bottom: 2.5rem;
-            }
-
-            .booking-item {
-                padding: 1rem 0.9rem;
-            }
-
-            .booking-map {
-                margin-top: 3rem;
-            }
-
-            .booking-map iframe {
-                height: 300px;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 2.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            nav {
-                padding: 1rem 1rem;
-            }
-
-            .nav-menu {
-                top: 68px;
-            }
-
-            .logo {
-                height: 40px;
-            }
-
-            .hero {
-                padding: 1.5rem 1rem 3rem;
-                min-height: auto;
-            }
-
-            .hero-content h1 {
-                font-size: 2rem;
-                letter-spacing: -0.5px;
-            }
-
-            .hero-content p {
-                font-size: 0.95rem;
-                line-height: 1.6;
-                margin-bottom: 1.4rem;
-            }
-
-            .hero-buttons {
-                gap: 0.8rem;
-            }
-
-            .btn-primary, .btn-secondary {
-                padding: 0.9rem 1.2rem;
-                font-size: 0.85rem;
-                letter-spacing: 0.5px;
-            }
-
-            .hero-image {
-                height: 250px;
-            }
-
-            .cta-btn {
-                padding: 0.6rem 1.2rem;
-                font-size: 0.75rem;
-            }
-
-            .about {
-                padding: 4rem 1rem;
-            }
-
-            .about-header {
-                margin-bottom: 3rem;
-            }
-
-            .about-year {
-                font-size: 0.75rem;
-                letter-spacing: 2px;
-            }
-
-            .about-title {
-                font-size: 2rem;
-                letter-spacing: -1px;
-            }
-
-            .about-text {
-                font-size: 1rem;
-                line-height: 1.8;
-                margin-bottom: 3rem;
-            }
-
-            .pricing-section {
-                padding: 2rem 1.5rem;
-            }
-
-            .pricing-title {
-                font-size: 1rem;
-                letter-spacing: 1.5px;
-            }
-
-            .pricing-item {
-                padding: 1.5rem 0;
-            }
-
-            .pricing-name {
-                font-size: 0.9rem;
-            }
-
-            .pricing-price {
-                font-size: 1.2rem;
-            }
-
-            .gallery {
-                padding: 4rem 1rem;
-            }
-
-            .gallery-container {
-                gap: 2.5rem;
-            }
-
-            .gallery-images {
-                grid-template-columns: 1fr;
-                grid-template-rows: repeat(3, 180px);
-            }
-
-            .gallery-item:nth-child(1) {
-                grid-row: span 1;
-            }
-
-            .gallery-title {
-                font-size: 1.8rem;
-            }
-
-            .gallery-review {
-                font-size: 1rem;
-                padding-left: 1rem;
-            }
-
-            .gallery-features li {
-                font-size: 0.95rem;
-            }
-
-            .booking {
-                padding: 4rem 1rem;
-            }
-
-            .booking-title {
-                font-size: 2rem;
-            }
-
-            .booking-subtitle {
-                font-size: 1rem;
-                margin-bottom: 2rem;
-            }
-
-            .booking-info {
-                grid-template-columns: 1fr;
-                gap: 0.8rem;
-                margin-bottom: 2.5rem;
-            }
-
-            .booking-label {
-                font-size: 0.72rem;
-            }
-
-            .booking-value {
-                font-size: 0.95rem;
-            }
-
-            .booking-hours-row {
-                font-size: 0.86rem;
-            }
-
-            .booking-cta {
-                width: 100%;
-                padding: 1rem 2rem;
-                font-size: 0.9rem;
-            }
-
-            .booking-map {
-                margin-top: 2.5rem;
-            }
-
-            .booking-map iframe {
-                height: 250px;
-                border-radius: 1px;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 2.5rem;
-            }
-
-            .footer-logo img {
-                height: 35px;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fadez Studio — Premium Barbershop Brielle</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ============================================================
+       CSS CUSTOM PROPERTIES — DESIGN TOKENS
+    ============================================================ */
+    :root {
+      /* Background */
+      --bg-primary:   #FFFFFF;
+      --bg-secondary: #F4F4F4;
+      --bg-card:      #EEEEEE;
+      --bg-glass:     rgba(255, 255, 255, 0.82);
+      --bg-glass-light: rgba(0, 0, 0, 0.03);
+
+      /* Monochrome Accent Palette */
+      --gold-primary:  #3A3A3A;
+      --gold-deep:     #111111;
+      --gold-light:    #000000;
+      --gold-glow:     rgba(0, 0, 0, 0.08);
+      --gold-glow-sm:  rgba(0, 0, 0, 0.04);
+
+      /* Text */
+      --text-primary:  #0A0A0A;
+      --text-secondary:#444444;
+      --text-muted:    #888888;
+
+      /* Borders */
+      --border-gold:   rgba(0, 0, 0, 0.12);
+      --border-subtle: rgba(0, 0, 0, 0.07);
+
+      /* Spacing */
+      --space-xs:  0.25rem;
+      --space-sm:  0.5rem;
+      --space-md:  1rem;
+      --space-lg:  1.5rem;
+      --space-xl:  2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Radius */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-pill: 100px;
+
+      /* Transitions */
+      --ease-luxury: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --ease-sharp:  cubic-bezier(0.16, 1, 0.3, 1);
+      --duration-sm: 0.25s;
+      --duration-md: 0.45s;
+      --duration-lg: 0.7s;
+    }
+
+    /* ============================================================
+       GLOBAL RESET & BASE
+    ============================================================ */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', 'Manrope', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-deep); border-radius: 2px; }
+
+    /* ============================================================
+       GLOBAL BACKGROUND — CINEMATIC ATMOSPHERE
+    ============================================================ */
+    .site-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    /* Noise texture overlay */
+    .site-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.028;
+      mix-blend-mode: overlay;
+    }
+
+    /* Radial vignette */
+    .site-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, transparent 40%, rgba(220,220,220,0.25) 100%);
+    }
+
+    /* Glow orbs */
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+
+    .glow-orb--left {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0,0,0,0.03) 0%, transparent 70%);
+      top: -100px; left: -200px;
+    }
+
+    .glow-orb--right {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,0,0,0.025) 0%, transparent 70%);
+      top: 200px; right: -150px;
+    }
+
+    .glow-orb--center {
+      width: 800px; height: 300px;
+      background: radial-gradient(ellipse, rgba(0,0,0,0.015) 0%, transparent 70%);
+      top: 40%; left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Subtle grid */
+    .site-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 20%, transparent 100%);
+    }
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 0 var(--space-xl);
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      /* Glass effect */
+      background: rgba(8, 8, 8, 0.82);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 1px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.02) inset;
+      /* Initial state for GSAP */
+      opacity: 0;
+      transform: translateY(-20px);
+      will-change: transform;
+    }
+
+    /* Navbar inner highlight line */
+    .navbar::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 5%; right: 5%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+      opacity: 1;
+    }
+
+    /* ---- Logo ---- */
+    .navbar__logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .navbar__logo img {
+      height: 36px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+      transition: opacity var(--duration-sm) var(--ease-luxury);
+    }
+
+    .navbar__logo:hover img {
+      opacity: 0.75;
+    }
+
+    /* ---- Center Nav ---- */
+    .navbar__nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xl);
+      list-style: none;
+    }
+
+    .navbar__nav-item a {
+      position: relative;
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #B8B8B8;
+      text-decoration: none;
+      padding: 4px 0;
+      transition: color var(--duration-sm) var(--ease-luxury);
+    }
+
+    /* Animated underline */
+    .navbar__nav-item a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0%; height: 1px;
+      background: linear-gradient(90deg, #C8C8C8, #FFFFFF);
+      transition: width var(--duration-md) var(--ease-sharp);
+    }
+
+    .navbar__nav-item a:hover {
+      color: #FFFFFF;
+    }
+
+    .navbar__nav-item a:hover::after {
+      width: 100%;
+    }
+
+    /* ---- Right CTAs ---- */
+    .navbar__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      flex-shrink: 0;
+    }
+
+    /* Secondary button */
+    .btn-secondary {
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-pill);
+      background: transparent;
+      cursor: pointer;
+      transition:
+        color var(--duration-sm) var(--ease-luxury),
+        border-color var(--duration-sm) var(--ease-luxury),
+        background var(--duration-sm) var(--ease-luxury);
+      white-space: nowrap;
+    }
+
+    .btn-secondary:hover {
+      color: var(--gold-light);
+      border-color: var(--gold-primary);
+      background: rgba(0,0,0,0.05);
+    }
+
+    /* Primary luxury CTA */
+    .btn-primary {
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      text-decoration: none;
+      padding: 11px 24px;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-deep) 60%, var(--gold-primary) 100%);
+      background-size: 200% auto;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition:
+        background-position var(--duration-md) var(--ease-luxury),
+        box-shadow var(--duration-md) var(--ease-luxury),
+        transform var(--duration-sm) var(--ease-luxury);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.18), 0 1px 6px rgba(0,0,0,0.12);
+      white-space: nowrap;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transition: left var(--duration-md) var(--ease-luxury);
+    }
+
+    .btn-primary:hover {
+      background-position: right center;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.28), 0 2px 10px rgba(0,0,0,0.14);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    /* ---- Hamburger ---- */
+    .navbar__hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 5px;
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px;
+      z-index: 1001;
+    }
+
+    .navbar__hamburger span {
+      display: block;
+      height: 1.5px;
+      background: #FFFFFF;
+      border-radius: 1px;
+      transition: all var(--duration-md) var(--ease-sharp);
+    }
+
+    .navbar__hamburger span:nth-child(1) { width: 22px; }
+    .navbar__hamburger span:nth-child(2) { width: 16px; }
+    .navbar__hamburger span:nth-child(3) { width: 22px; }
+
+    /* Hamburger active state */
+    .navbar__hamburger.active span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+      width: 22px;
+    }
+    .navbar__hamburger.active span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    .navbar__hamburger.active span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+      width: 22px;
+    }
+
+    /* ---- Mobile Menu Panel ---- */
+    .mobile-menu {
+      position: fixed;
+      top: 76px; left: 0; right: 0;
+      z-index: 999;
+      background: rgba(8, 8, 8, 0.97);
+      backdrop-filter: blur(24px) saturate(1.3);
+      -webkit-backdrop-filter: blur(24px) saturate(1.3);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      padding: var(--space-xl) var(--space-xl);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+      /* Hidden by default */
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      transition: opacity var(--duration-md) var(--ease-sharp), transform var(--duration-md) var(--ease-sharp);
+    }
+
+    .mobile-menu.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .mobile-menu__nav {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .mobile-menu__nav li {
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .mobile-menu__nav li a {
+      display: block;
+      padding: 16px 0;
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #B8B8B8;
+      text-decoration: none;
+      transition: color var(--duration-sm) var(--ease-luxury), padding-left var(--duration-sm) var(--ease-luxury);
+    }
+
+    .mobile-menu__nav li a:hover {
+      color: #FFFFFF;
+      padding-left: 10px;
+    }
+
+    .mobile-menu__actions {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      padding-top: var(--space-sm);
+    }
+
+    .mobile-menu__actions .btn-secondary,
+    .mobile-menu__actions .btn-primary {
+      text-align: center;
+      display: block;
+    }
+
+    /* ---- Navbar button overrides (dark background context) ---- */
+    .navbar .btn-secondary {
+      color: #B8B8B8;
+      border-color: rgba(255,255,255,0.22);
+    }
+
+    .navbar .btn-secondary:hover {
+      color: #FFFFFF;
+      border-color: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .navbar .btn-primary {
+      background: linear-gradient(135deg, #FFFFFF 0%, #C8C8C8 60%, #FFFFFF 100%);
+      color: #0A0A0A;
+      box-shadow: 0 0 20px rgba(255,255,255,0.15), 0 4px 14px rgba(0,0,0,0.3);
+    }
+
+    .navbar .btn-primary:hover {
+      box-shadow: 0 0 32px rgba(255,255,255,0.25), 0 6px 22px rgba(0,0,0,0.35);
+    }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-xl);
+      padding-top: 76px;
+      overflow: hidden;
+    }
+
+    .hero__inner {
+      width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      padding: var(--space-3xl) 0;
+    }
+
+    /* ---- HERO LEFT ---- */
+    .hero__left {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+      max-width: 580px;
+    }
+
+    /* Eyebrow text */
+    .hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+      opacity: 0; /* GSAP animates in */
+    }
+
+    .hero__eyebrow::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-primary));
+    }
+
+    .hero__eyebrow::after {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold-primary), transparent);
+    }
+
+    /* Headline */
+    .hero__headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 4.5vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      overflow: hidden;
+    }
+
+    .hero__headline .line {
+      display: block;
+      opacity: 0; /* GSAP */
+    }
+
+    .hero__headline .accent {
+      color: transparent;
+      -webkit-text-stroke: 1px var(--gold-primary);
+      font-style: italic;
+    }
+
+    .hero__headline .gold-text {
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 50%, var(--gold-deep) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Divider */
+    .hero__divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold-primary), transparent);
+      opacity: 0; /* GSAP */
+    }
+
+    /* Subtext */
+    .hero__subtext {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--text-muted);
+      max-width: 440px;
+      opacity: 0; /* GSAP */
+    }
+
+    /* Button group */
+    .hero__buttons {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+      opacity: 0; /* GSAP */
+    }
+
+    /* Hero-specific button sizes */
+    .hero__buttons .btn-primary {
+      font-size: 0.78rem;
+      padding: 14px 32px;
+    }
+
+    .hero__buttons .btn-secondary {
+      font-size: 0.78rem;
+      padding: 13px 28px;
+    }
+
+    /* Info row */
+    .hero__info-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      margin-top: var(--space-sm);
+      opacity: 0; /* GSAP */
+    }
+
+    .hero__info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 0 var(--space-lg);
+      position: relative;
+    }
+
+    .hero__info-item:first-child {
+      padding-left: 0;
+    }
+
+    .hero__info-item + .hero__info-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 10%; bottom: 10%;
+      width: 1px;
+      background: var(--border-gold);
+    }
+
+    .hero__info-label {
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+    }
+
+    .hero__info-value {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+    }
+
+    /* ---- HERO RIGHT ---- */
+    .hero__right {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xl) 0;
+    }
+
+    /* ---- IMAGE FRAME ---- */
+    .hero__image-frame {
+      position: relative;
+      width: 480px;
+      height: 400px;
+      flex-shrink: 0;
+    }
+
+    /* Main image container */
+    .hero__image-wrap {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--border-gold);
+      box-shadow:
+        0 30px 70px rgba(0,0,0,0.20),
+        0 0 0 1px rgba(0,0,0,0.05) inset;
+      opacity: 0; /* GSAP */
+      will-change: transform;
+      z-index: 2;
+    }
+
+    .hero__image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      filter: grayscale(20%) contrast(1.08) brightness(0.88);
+      transition: transform 1s var(--ease-luxury);
+    }
+
+    .hero__image-frame:hover .hero__image-wrap img {
+      transform: scale(1.04);
+    }
+
+    /* Dark gradient overlay on image */
+    .hero__image-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.12) 45%, transparent 100%),
+        linear-gradient(160deg, rgba(0,0,0,0.25) 0%, transparent 55%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Decorative outer ring */
+    .hero__image-ring {
+      position: absolute;
+      inset: -14px;
+      border-radius: calc(var(--radius-xl) + 14px);
+      border: 1px solid var(--border-gold);
+      opacity: 0; /* GSAP */
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Corner ornaments */
+    .hero__corner {
+      position: absolute;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .hero__corner--tl { top: -24px; left: -24px; }
+    .hero__corner--br { bottom: -24px; right: -24px; }
+
+    .hero__corner-line {
+      width: 36px; height: 36px;
+      border-top: 1px solid var(--gold-primary);
+      border-left: 1px solid var(--gold-primary);
+      opacity: 0.5;
+    }
+
+    .hero__corner-line--br {
+      border-top: none;
+      border-left: none;
+      border-bottom: 1px solid var(--gold-primary);
+      border-right: 1px solid var(--gold-primary);
+    }
+
+    /* ---- Image bottom label ---- */
+    .hero__image-label {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      opacity: 0; /* GSAP */
+    }
+
+    .hero__image-label-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .hero__image-label-sub {
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+    }
+
+    .hero__image-label-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .hero__image-label-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+
+    .hero__image-label-score {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+
+    .hero__image-label-rated {
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.55rem;
+      font-weight: 500;
+      color: var(--gold-primary);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       ABOUT + PRICING SECTION
+    ============================================================ */
+    .about {
+      position: relative;
+      z-index: 1;
+      padding: var(--space-3xl) var(--space-xl);
+      background: var(--bg-primary);
+    }
+
+    .about__inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    /* ---- LEFT: About text ---- */
+    .about__left {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .about__since {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+      opacity: 0;
+    }
+
+    .about__since::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--gold-primary);
+    }
+
+    .about__heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      opacity: 0;
+    }
+
+    .about__divider {
+      width: 50px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold-primary), transparent);
+      opacity: 0;
+    }
+
+    .about__text {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--text-muted);
+      max-width: 460px;
+      opacity: 0;
+    }
+
+    /* ---- RIGHT: Pricing ---- */
+    .about__right {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .pricing__label {
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+      opacity: 0;
+    }
+
+    .pricing__heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      opacity: 0;
+    }
+
+    .pricing__list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      list-style: none;
+      opacity: 0;
+    }
+
+    .pricing__item {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 22px 24px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+      transition:
+        border-color var(--duration-md) var(--ease-luxury),
+        box-shadow var(--duration-md) var(--ease-luxury),
+        transform var(--duration-sm) var(--ease-luxury);
+    }
+
+    .pricing__item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(0,0,0,0.025) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity var(--duration-md) var(--ease-luxury);
+    }
+
+    .pricing__item:hover {
+      border-color: rgba(0,0,0,0.22);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    .pricing__item:hover::before {
+      opacity: 1;
+    }
+
+    .pricing__item-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      font-style: italic;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      min-width: 20px;
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+
+    .pricing__item-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .pricing__item-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+
+    .pricing__item-dots {
+      flex: 1;
+      height: 1px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--border-gold) 0px,
+        var(--border-gold) 3px,
+        transparent 3px,
+        transparent 10px
+      );
+      min-width: 20px;
+    }
+
+    .pricing__item-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      flex-shrink: 0;
+      letter-spacing: -0.01em;
+    }
+
+    .pricing__note {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: var(--space-xs);
+      opacity: 0;
+    }
+
+    .pricing__note::before {
+      content: '';
+      display: block;
+      width: 16px;
+      height: 1px;
+      background: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    /* ---- Responsive about ---- */
+    /* about responsive handled in master block below */
+
+    /* ============================================================
+       WHY FADEZ STUDIO SECTION
+    ============================================================ */
+    .why {
+      position: relative;
+      z-index: 1;
+      padding: var(--space-3xl) var(--space-xl);
+      background: var(--bg-secondary);
+      overflow: hidden;
+    }
+
+    .why__inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    /* ---- LEFT ---- */
+    .why__left {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xl);
+    }
+
+    .why__header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .why__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+      opacity: 0;
+    }
+
+    .why__eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--gold-primary);
+    }
+
+    .why__heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      opacity: 0;
+    }
+
+    .why__sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text-muted);
+      opacity: 0;
+    }
+
+    /* Testimonial quote */
+    .why__quote {
+      position: relative;
+      padding: 28px 30px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-xl);
+      opacity: 0;
+    }
+
+    .why__quote-mark {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      line-height: 0.6;
+      color: var(--gold-primary);
+      opacity: 0.15;
+      position: absolute;
+      top: 20px; left: 22px;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .why__quote-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 400;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      font-style: italic;
+      position: relative;
+      z-index: 1;
+      padding-left: 8px;
+    }
+
+    .why__quote-stars {
+      display: flex;
+      gap: 3px;
+      margin-top: 14px;
+      padding-left: 8px;
+    }
+
+    .why__quote-stars span {
+      font-size: 11px;
+      color: var(--gold-primary);
+    }
+
+    /* Feature list */
+    .why__features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      opacity: 0;
+    }
+
+    .why__feature {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-md);
+      transition:
+        border-color var(--duration-md) var(--ease-luxury),
+        transform var(--duration-sm) var(--ease-luxury),
+        box-shadow var(--duration-md) var(--ease-luxury);
+    }
+
+    .why__feature:hover {
+      border-color: rgba(0,0,0,0.22);
+      transform: translateX(4px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+
+    .why__feature-icon {
+      width: 30px; height: 30px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 13px;
+    }
+
+    .why__feature-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      letter-spacing: 0.01em;
+    }
+
+    /* ---- RIGHT: Photo collage ---- */
+    .why__right {
+      position: relative;
+      height: 580px;
+    }
+
+    .why__photo {
+      position: absolute;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-gold);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+      opacity: 0;
+      will-change: transform;
+    }
+
+    .why__photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(15%) contrast(1.05) brightness(0.92);
+      transition: transform 1s var(--ease-luxury);
+    }
+
+    .why__photo:hover img {
+      transform: scale(1.05);
+    }
+
+    .why__photo--main {
+      width: 300px; height: 400px;
+      top: 0; left: 40px;
+      z-index: 2;
+    }
+
+    .why__photo--accent {
+      width: 220px; height: 280px;
+      bottom: 0; right: 0;
+      z-index: 3;
+    }
+
+    .why__photo--small {
+      width: 160px; height: 180px;
+      top: 60px; right: 60px;
+      z-index: 1;
+    }
+
+    /* Decorative elements on collage */
+    .why__collage-ring {
+      position: absolute;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      border: 1px solid var(--border-gold);
+      bottom: 40px; left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .why__collage-dot {
+      position: absolute;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--gold-primary);
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .why__collage-dot--1 { top: 20px; right: 40px; }
+    .why__collage-dot--2 { bottom: 100px; left: 20px; }
+    .why__collage-dot--3 { top: 180px; right: 20px; }
+
+    /* why__photo sizes kept for large screens — refined in master responsive below */
+
+    /* ============================================================
+       APPOINTMENT / CONTACT SECTION
+    ============================================================ */
+    .appt {
+      position: relative;
+      z-index: 1;
+      padding: var(--space-3xl) var(--space-xl);
+      background: var(--bg-primary);
+      overflow: hidden;
+    }
+
+    .appt__inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    /* ---- LEFT ---- */
+    .appt__left {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xl);
+    }
+
+    .appt__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+      opacity: 0;
+    }
+
+    .appt__eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--gold-primary);
+    }
+
+    .appt__heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      margin-top: 12px;
+      opacity: 0;
+    }
+
+    .appt__sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-top: 10px;
+      opacity: 0;
+    }
+
+    /* Contact cards */
+    .appt__contacts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      opacity: 0;
+    }
+
+    .appt__contact {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 20px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      text-decoration: none;
+      color: inherit;
+      transition:
+        border-color var(--duration-md) var(--ease-luxury),
+        transform var(--duration-sm) var(--ease-luxury),
+        box-shadow var(--duration-md) var(--ease-luxury);
+    }
+
+    .appt__contact:hover {
+      border-color: rgba(0,0,0,0.22);
+      transform: translateX(4px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+
+    .appt__contact-icon {
+      width: 40px; height: 40px;
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      border: 1px solid var(--border-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+
+    .appt__contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .appt__contact-label {
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .appt__contact-value {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.93rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .appt__cta {
+      opacity: 0;
+    }
+
+    /* ---- RIGHT ---- */
+    .appt__right {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Hours card */
+    .appt__hours {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-xl);
+      padding: 28px 30px;
+      opacity: 0;
+    }
+
+    .appt__hours-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-gold);
+    }
+
+    .appt__hours-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .appt__hours-row:last-child {
+      border-bottom: none;
+    }
+
+    .appt__hours-day {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.87rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .appt__hours-time {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.87rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+
+    .appt__hours-time--closed {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Map */
+    .appt__map-wrap {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--border-gold);
+      height: 260px;
+      position: relative;
+      opacity: 0;
+    }
+
+    .appt__map-wrap iframe {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: grayscale(25%) contrast(1.05);
+    }
+
+    .appt__map-link {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-sm);
+      padding: 7px 13px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      text-decoration: none;
+      z-index: 1;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      transition:
+        box-shadow var(--duration-sm) var(--ease-luxury),
+        transform var(--duration-sm) var(--ease-luxury);
+    }
+
+    .appt__map-link:hover {
+      box-shadow: 0 4px 18px rgba(0,0,0,0.13);
+      transform: translateY(-1px);
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      position: relative;
+      z-index: 1;
+      background: #080808;
+      color: #ffffff;
+      padding: var(--space-3xl) var(--space-xl) 0;
+      overflow: hidden;
+    }
+
+    .footer__inner {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    /* Top grid */
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 60px;
+      padding-bottom: var(--space-3xl);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* Brand column */
+    .footer__brand {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .footer__logo {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .footer__logo img {
+      height: 32px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+      opacity: 0.9;
+      filter: brightness(0) invert(1);
+      transition: opacity 0.2s ease;
+    }
+
+    .footer__logo:hover img {
+      opacity: 0.65;
+    }
+
+    .footer__tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 300;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.45);
+      max-width: 220px;
+    }
+
+    .footer__socials {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .footer__social {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      font-size: 14px;
+      transition:
+        border-color 0.25s ease,
+        color 0.25s ease,
+        background 0.25s ease;
+    }
+
+    .footer__social:hover {
+      border-color: rgba(255,255,255,0.35);
+      color: #ffffff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    /* Nav columns */
+    .footer__col-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 18px;
+    }
+
+    .footer__links {
+      list-style: none;
+      padding: 0; margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer__links a {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      display: inline-block;
+    }
+
+    .footer__links a:hover {
+      color: #ffffff;
+    }
+
+    /* Bottom bar */
+    .footer__bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 0;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer__copy {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.28);
+    }
+
+    .footer__legal {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer__legal a {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.28);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer__legal a:hover {
+      color: rgba(255,255,255,0.65);
+    }
+
+    /* Decorative oversized text */
+    .footer__watermark {
+      position: absolute;
+      bottom: 56px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(80px, 12vw, 160px);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      color: rgba(255,255,255,0.025);
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+    }
+
+    /* Footer responsive in master block below */
+
+    /* ============================================================
+       UTILITY
+    ============================================================ */
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ============================================================
+       MASTER RESPONSIVE SYSTEM
+    ============================================================ */
+
+    /* -- 1200px -- */
+    @media (max-width: 1200px) {
+      .hero__inner { gap: 48px; }
+    }
+
+    /* -- 1024px: tablet landscape -- */
+    @media (max-width: 1024px) {
+      .hero__inner { gap: 40px; }
+      .hero__image-frame { width: 400px; height: 340px; }
+
+      .about__inner,
+      .why__inner,
+      .appt__inner { gap: 48px; }
+
+      .footer__grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+
+      .why__photo--main   { width: 260px; height: 340px; }
+      .why__photo--accent { width: 190px; height: 240px; }
+      .why__photo--small  { width: 140px; height: 160px; }
+    }
+
+    /* -- 900px: tablet portrait -- */
+    @media (max-width: 900px) {
+      .about__inner { grid-template-columns: 1fr; gap: var(--space-2xl); }
+      .about__text  { max-width: 100%; }
+
+      .why__inner   { grid-template-columns: 1fr; gap: var(--space-2xl); }
+      .why__right   { height: 380px; }
+      .why__photo--main   { width: 220px; height: 300px; left: 0; }
+      .why__photo--accent { width: 180px; height: 230px; right: 0; bottom: 0; }
+      .why__photo--small  { display: none; }
+
+      .appt__inner  { grid-template-columns: 1fr; gap: var(--space-2xl); }
+    }
+
+    /* -- 768px: mobile landscape / large phone -- */
+    @media (max-width: 768px) {
+      /* Navbar */
+      .navbar { padding: 0 var(--space-lg); height: 64px; }
+      .navbar__nav, .navbar__actions { display: none; }
+      .navbar__hamburger { display: flex; }
+
+      /* Hero */
+      .hero { padding: 0 var(--space-lg); }
+      .hero__inner {
+        grid-template-columns: 1fr;
+        gap: var(--space-2xl);
+        padding: calc(var(--space-3xl) - 1rem) 0;
+      }
+      .hero__left { max-width: 100%; text-align: center; align-items: center; }
+      .hero__headline { font-size: clamp(2.2rem, 8vw, 3rem); }
+      .hero__subtext  { max-width: 100%; }
+      .hero__buttons  { justify-content: center; flex-direction: column; width: 100%; }
+      .hero__buttons .btn-primary,
+      .hero__buttons .btn-secondary { width: 100%; text-align: center; font-size: 0.8rem; padding: 15px 24px; }
+      .hero__info-row { justify-content: center; }
+      .hero__info-item { padding: 0 var(--space-md); align-items: center; }
+      .hero__right { width: 100%; }
+      .hero__image-frame { width: min(100%, 92vw); height: 320px; }
+
+      /* Sections */
+      .about { padding: var(--space-2xl) var(--space-lg); }
+      .why   { padding: var(--space-2xl) var(--space-lg); }
+      .why__right { height: 320px; }
+      .why__photo--main   { width: 190px; height: 260px; }
+      .why__photo--accent { width: 155px; height: 200px; }
+      .appt  { padding: var(--space-2xl) var(--space-lg); }
+      .appt__map-wrap { height: 220px; }
+
+      /* ---- Centre all headings / labels on mobile ---- */
+      .about__left,
+      .about__right,
+      .why__left,
+      .appt__left {
+        align-items: center;
+        text-align: center;
+      }
+
+      .about__since,
+      .about__heading,
+      .about__text,
+      .about__divider,
+      .pricing__label,
+      .pricing__heading,
+      .pricing__note,
+      .why__eyebrow,
+      .why__heading,
+      .why__sub,
+      .appt__eyebrow,
+      .appt__heading,
+      .appt__sub {
+        text-align: center;
+      }
+
+      /* Divider + eyebrow ::before lines stay centred */
+      .about__since,
+      .why__eyebrow,
+      .appt__eyebrow {
+        justify-content: center;
+      }
+
+      .about__divider {
+        align-self: center;
+      }
+
+      /* Pricing items keep their layout but centre the block */
+      .pricing__list {
+        width: 100%;
+      }
+
+      /* Why features centre icon+text */
+      .why__features {
+        width: 100%;
+      }
+
+      /* Appt contacts full width */
+      .appt__contacts,
+      .appt__cta {
+        width: 100%;
+        align-items: center;
+      }
+
+      .appt__cta .btn-primary,
+      .appt__cta .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    /* -- 480px: small phones -- */
+    @media (max-width: 480px) {
+      .navbar { padding: 0 var(--space-md); height: 58px; }
+
+      .hero { padding: 0 var(--space-md); }
+      .hero__headline { font-size: clamp(1.9rem, 8.5vw, 2.5rem); }
+      .hero__eyebrow  { font-size: 0.58rem; }
+      .hero__image-frame { height: 270px; }
+      .hero__info-row { flex-wrap: wrap; gap: var(--space-sm); }
+      .hero__info-item { padding: 4px var(--space-sm); }
+
+      .about { padding: var(--space-xl) var(--space-md); }
+      .about__heading, .why__heading, .appt__heading {
+        font-size: clamp(1.7rem, 7vw, 2.4rem);
+      }
+      .pricing__item { padding: 16px 14px; }
+      .pricing__item-num { font-size: 0.85rem; }
+
+      .why { padding: var(--space-xl) var(--space-md); }
+      .why__right { height: 280px; }
+      .why__photo--main   { width: 160px; height: 220px; }
+      .why__photo--accent { width: 130px; height: 170px; }
+      .why__quote { padding: 20px 18px; }
+
+      .appt { padding: var(--space-xl) var(--space-md); }
+      .appt__hours { padding: 20px 16px; }
+      .appt__hours-row { flex-direction: column; gap: 2px; padding: 10px 0; }
+      .appt__hours-time { font-size: 0.8rem; }
+      .appt__map-wrap { height: 200px; }
+
+      .footer { padding: var(--space-xl) var(--space-md) 0; }
+      .footer__grid { grid-template-columns: 1fr; gap: 28px; }
+      .footer__bottom { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .footer__watermark { font-size: clamp(60px, 18vw, 100px); }
+    }
+
+    /* -- 360px: smallest phones -- */
+    @media (max-width: 360px) {
+      .hero__headline { font-size: 1.75rem; }
+      .hero__image-frame { height: 240px; }
+      .hero__buttons .btn-primary,
+      .hero__buttons .btn-secondary { font-size: 0.75rem; padding: 13px 16px; }
+
+      .why__photo--main   { width: 140px; height: 190px; }
+      .why__photo--accent { width: 110px; height: 150px; }
+
+      .appt__contact { padding: 14px 14px; }
+      .footer__legal { gap: 14px; flex-wrap: wrap; }
+    }
+  </style>
 </head>
 <body>
-    <!-- NAVBAR -->
-    <nav>
-        <div class="navbar-container">
-            <div class="logo">
-                <img src="FADEZSTUDIO.png" alt="Logo">
-            </div>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="#about">Over ons</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="https://www.fresha.com/nl/a/fadez-studio-brielle-nobelstraat-54-npkbfiv8/all-offer?menu=true&share=true&pId=2638347" target="_blank" class="cta-btn" style="display: inline-block; text-decoration: none;">Reserveer</a></li>
-            </ul>
-        </div>
+
+  <!-- ============================================================
+       GLOBAL BACKGROUND
+  ============================================================ -->
+  <div class="site-bg" aria-hidden="true">
+    <div class="glow-orb glow-orb--left"></div>
+    <div class="glow-orb glow-orb--right"></div>
+    <div class="glow-orb glow-orb--center"></div>
+    <div class="site-grid"></div>
+  </div>
+
+  <!-- ============================================================
+       NAVBAR
+  ============================================================ -->
+  <header>
+    <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+
+      <!-- Logo -->
+      <a href="#hero" class="navbar__logo" aria-label="Fadez Studio - Home">
+        <img src="fadezstudio.png" alt="Fadez Studio" />
+      </a>
+
+      <!-- Center Navigation -->
+      <ul class="navbar__nav" role="list">
+        <li class="navbar__nav-item"><a href="#hero">Home</a></li>
+        <li class="navbar__nav-item"><a href="#about">Diensten</a></li>
+        <li class="navbar__nav-item"><a href="#why">Over Ons</a></li>
+        <li class="navbar__nav-item"><a href="#appt">Contact</a></li>
+      </ul>
+
+      <!-- Right Actions -->
+      <div class="navbar__actions">
+        <a href="#why" class="btn-secondary">Ons Werk</a>
+        <a href="#appt" class="btn-primary">Afspraak Maken</a>
+      </div>
+
+      <!-- Hamburger (mobile) -->
+      <button class="navbar__hamburger" id="hamburger" aria-label="Toggle mobile menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </nav>
 
-    <!-- HERO SECTION -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h1>Welkom op <span class="highlight">de site van</span> Fadezstudio</h1>
-                <p>Waar vakmanschap en stijl samenkomen. Onze barbers zijn experts in moderne snijwerk, verzorging en service.</p>
-                <div class="hero-buttons">
-                    <a href="https://www.fresha.com/nl/a/fadez-studio-brielle-nobelstraat-54-npkbfiv8/all-offer?menu=true&share=true&pId=2638347" target="_blank" class="btn-primary" style="text-decoration: none;">Boek nu</a>
-                    <a href="#about" class="btn-secondary" style="text-decoration: none; color: #000000;">Ontdek meer</a>
-                </div>
+    <!-- Mobile Menu Panel -->
+    <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile navigation">
+      <ul class="mobile-menu__nav" role="list">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">Diensten</a></li>
+        <li><a href="#why">Over Ons</a></li>
+        <li><a href="#appt">Contact</a></li>
+      </ul>
+      <div class="mobile-menu__actions">
+        <a href="#why" class="btn-secondary">Ons Werk</a>
+        <a href="#appt" class="btn-primary">Afspraak Maken</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       HERO SECTION
+  ============================================================ -->
+  <main>
+    <section class="hero" id="hero" aria-labelledby="hero-headline">
+
+      <div class="hero__inner">
+
+        <!-- ---- LEFT: Editorial Content ---- -->
+        <div class="hero__left">
+
+          <!-- Eyebrow -->
+          <p class="hero__eyebrow" id="hero-eyebrow">Klassiek Vakmanschap. Moderne Precisie.</p>
+
+          <!-- Headline -->
+          <h1 class="hero__headline" id="hero-headline">
+            <span class="line">Welkom bij</span>
+            <span class="line"><em class="gold-text">Fadez</em> Studio</span>
+            <span class="line accent">Brielle</span>
+          </h1>
+
+          <!-- Divider -->
+          <div class="hero__divider" aria-hidden="true"></div>
+
+          <!-- Subtext -->
+          <p class="hero__subtext">
+            Ervaar precisieknipbeurten, verfijnde verzorging en een sfeer gecreëerd voor mannen die stijl, traditie en het ambacht waarderen. Elk bezoek — een belevenis.
+          </p>
+
+          <!-- CTA Buttons -->
+          <div class="hero__buttons">
+            <a href="#appt" class="btn-primary">Reserveer Nu</a>
+            <a href="#about" class="btn-secondary">Onze Diensten</a>
+          </div>
+
+          <!-- Info Row -->
+          <div class="hero__info-row" aria-label="Merkhighlights">
+            <div class="hero__info-item">
+              <span class="hero__info-label">Opgericht</span>
+              <span class="hero__info-value">Sinds 2025</span>
             </div>
-            <div class="hero-image">
-                <div class="hero-image-frame">
-                    <img src="kapperzaak.jpg" alt="Fadez Studio Kapperszaak">
-                </div>
+            <div class="hero__info-item">
+              <span class="hero__info-label">Stijl</span>
+              <span class="hero__info-value">Exclusieve Stijl</span>
             </div>
+            <div class="hero__info-item">
+              <span class="hero__info-label">Service</span>
+              <span class="hero__info-value">Op Afspraak</span>
+            </div>
+          </div>
         </div>
+
+        <!-- ---- RIGHT: Hero Image ---- -->
+        <div class="hero__right">
+          <div class="hero__image-frame">
+
+            <!-- Decorative outer ring -->
+            <div class="hero__image-ring" id="visual-ring"></div>
+
+            <!-- Corner ornaments -->
+            <div class="hero__corner hero__corner--tl">
+              <div class="hero__corner-line"></div>
+            </div>
+            <div class="hero__corner hero__corner--br">
+              <div class="hero__corner-line hero__corner-line--br"></div>
+            </div>
+
+            <!-- Image -->
+            <div class="hero__image-wrap" id="visual-portrait">
+              <img
+                src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=700&h=900&fit=crop&q=80"
+                alt="Premium barbershop grooming experience"
+                loading="eager"
+              />
+              <div class="hero__image-overlay"></div>
+
+              <!-- Bottom label inside image -->
+              <div class="hero__image-label" id="image-label">
+                <div class="hero__image-label-text">
+                  <span class="hero__image-label-sub">Handtekening Service</span>
+                  <span class="hero__image-label-title">De Heren Ervaring</span>
+                </div>
+                <div class="hero__image-label-badge">
+                  <span class="hero__image-label-score">4.9</span>
+                  <span class="hero__image-label-rated">★ Topbeoordeeld</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- /hero__right -->
+
+      </div>
     </section>
+  </main>
 
-    <!-- ABOUT SECTION -->
-    <section class="about" id="about">
-        <div class="about-container">
-            <div class="about-header">
-                <div class="about-year">SINDS 2025</div>
-                <h2 class="about-title">Over Fadezstudio</h2>
-            </div>
+  <!-- ============================================================
+       ABOUT + PRICING SECTION
+  ============================================================ -->
+  <section class="about" id="about" aria-labelledby="about-heading">
+    <div class="about__inner">
 
-            <div class="about-content">
-                <div class="about-text">
-                    <p>Fadez Studio is ontstaan vanuit één duidelijke visie: een barbershop waar aandacht, kwaliteit en sfeer centraal staan. Wij geloven dat een goede haircut draait om vakmanschap, persoonlijke aandacht en een ervaring waarbij jij met zelfvertrouwen de deur uitloopt.</p>
-                </div>
-            </div>
+      <!-- LEFT: Story -->
+      <div class="about__left">
+        <span class="about__since" id="about-since">Sinds 2025</span>
+        <h2 class="about__heading" id="about-heading">Over Fadez<br>Studio</h2>
+        <div class="about__divider" id="about-divider"></div>
+        <p class="about__text" id="about-text">
+          Fadez Studio is ontstaan vanuit één duidelijke visie: een barbershop waar aandacht, kwaliteit en sfeer centraal staan. Wij geloven dat een goede haircut draait om vakmanschap, persoonlijke aandacht en een ervaring waarbij jij met zelfvertrouwen de deur uitloopt.
+        </p>
+      </div>
 
-            <div class="pricing-section">
-                <div class="pricing-title">Prijzenlijst</div>
-                <div class="pricing-grid">
-                    <div class="pricing-item">
-                        <span class="pricing-name">Knippen</span>
-                        <span class="pricing-price">25€</span>
-                    </div>
-                    <div class="pricing-item">
-                        <span class="pricing-name">Knippen + Baard</span>
-                        <span class="pricing-price">30€</span>
-                    </div>
-                    <div class="pricing-item">
-                        <span class="pricing-name">Permanent Krullenbehandeling</span>
-                        <span class="pricing-price">50€</span>
-                    </div>
-                </div>
-                <div class="pricing-note">* Wij knippen geen kinderen onder de 8 jaar</div>
+      <!-- RIGHT: Pricing -->
+      <div class="about__right">
+        <span class="pricing__label" id="pricing-label">Prijzenlijst</span>
+        <h3 class="pricing__heading" id="pricing-heading">Onze diensten</h3>
+        <ul class="pricing__list" id="pricing-list" role="list">
+          <li class="pricing__item">
+            <span class="pricing__item-num">01</span>
+            <div class="pricing__item-body">
+              <span class="pricing__item-name">Knippen</span>
+              <span class="pricing__item-dots" aria-hidden="true"></span>
             </div>
+            <span class="pricing__item-price">&euro;&thinsp;25</span>
+          </li>
+          <li class="pricing__item">
+            <span class="pricing__item-num">02</span>
+            <div class="pricing__item-body">
+              <span class="pricing__item-name">Knippen + Baard</span>
+              <span class="pricing__item-dots" aria-hidden="true"></span>
+            </div>
+            <span class="pricing__item-price">&euro;&thinsp;30</span>
+          </li>
+          <li class="pricing__item">
+            <span class="pricing__item-num">03</span>
+            <div class="pricing__item-body">
+              <span class="pricing__item-name">Permanent Krullenbehandeling</span>
+              <span class="pricing__item-dots" aria-hidden="true"></span>
+            </div>
+            <span class="pricing__item-price">&euro;&thinsp;50</span>
+          </li>
+        </ul>
+        <p class="pricing__note" id="pricing-note">Wij knippen geen kinderen onder de 8 jaar</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       WHY FADEZ STUDIO SECTION
+  ============================================================ -->
+  <section class="why" id="why" aria-labelledby="why-heading">
+    <div class="why__inner">
+
+      <!-- LEFT: Content -->
+      <div class="why__left">
+
+        <div class="why__header">
+          <span class="why__eyebrow" id="why-eyebrow">Waarom kiezen voor ons</span>
+          <h2 class="why__heading" id="why-heading">Waarom Fadez<br>Studio</h2>
+          <p class="why__sub" id="why-sub">Meer dan alleen een knipbeurt</p>
         </div>
-    </section>
 
-    <!-- GALLERY SECTION -->
-    <section class="gallery" id="portfolio">
-        <div class="gallery-container">
-            <div class="gallery-images">
-                <div class="gallery-item">
-                    <img src="Kapsel1.jpg" alt="Haircut 1">
-                </div>
-                <div class="gallery-item">
-                    <img src="Kapsel4.avif" alt="Haircut 2">
-                </div>
-                <div class="gallery-item">
-                    <img src="Kapsel3.jpg" alt="Haircut 3">
-                </div>
-            </div>
-            <div class="gallery-content">
-                <div class="gallery-badge">Waarom Fadez Studio</div>
-                <h2 class="gallery-title">Meer dan alleen een knipbeurt</h2>
-                <blockquote class="gallery-review">
-                    "Beste barbershop in de stad! De sfeer is relaxed en de barbers weten precies wat ze doen. Ik kom hier al jaren en ben nog nooit teleurgesteld."
-                </blockquote>
-                <ul class="gallery-features">
-                    <li>Ervaren en gepassioneerde barbers</li>
-                    <li>Moderne technieken & klassiek vakmanschap</li>
-                    <li>Persoonlijke aandacht voor elk detail</li>
-                    <li>Relaxte en stijlvolle ambiance</li>
-                    <li>Premium producten voor optimaal resultaat</li>
-                </ul>
-            </div>
+        <!-- Testimonial -->
+        <div class="why__quote" id="why-quote">
+          <span class="why__quote-mark" aria-hidden="true">&ldquo;</span>
+          <p class="why__quote-text">
+            Beste barbershop in de stad! De sfeer is relaxed en de barbers weten precies wat ze doen. Ik kom hier al jaren en ben nog nooit teleurgesteld.
+          </p>
+          <div class="why__quote-stars" aria-label="5 sterren">
+            <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span>
+          </div>
         </div>
-    </section>
 
-    <!-- BOOKING SECTION -->
-    <section class="booking" id="contact">
-        <div class="booking-container">
-            <h2 class="booking-title">Maak een Afspraak</h2>
-            <p class="booking-subtitle">Klaar voor een fresh cut? Boek direct online of bel ons voor beschikbaarheid.</p>
-            
-            <div class="booking-info">
-                <div class="booking-item">
-                    <div class="booking-label">Telefoon</div>
-                    <div class="booking-value">+31 681826171</div>
-                </div>
-                <div class="booking-item">
-                    <div class="booking-label">Locatie</div>
-                    <div class="booking-value">Nobelstraat 54, Brielle</div>
-                </div>
-                <div class="booking-item hours-item">
-                    <div class="booking-label">Openingstijden</div>
-                    <div class="booking-value booking-hours booking-hours-list">
-                        <div class="booking-hours-row"><span>Maandag</span><span>Gesloten</span></div>
-                        <div class="booking-hours-row"><span>Dinsdag t/m Donderdag</span><span>10:00 - 19:00</span></div>
-                        <div class="booking-hours-row"><span>Vrijdag</span><span>10:00 - 20:00</span></div>
-                        <div class="booking-hours-row"><span>Zaterdag</span><span>10:00 - 18:00</span></div>
-                        <div class="booking-hours-row"><span>Zondag</span><span>Gesloten</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <a href="https://www.fresha.com/nl/a/fadez-studio-brielle-nobelstraat-54-npkbfiv8/all-offer?menu=true&share=true&pId=2638347" target="_blank" class="booking-cta" style="text-decoration: none; display: inline-block;">Reserveer Nu</a>
-            
-            <div class="booking-map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.658762875892!2d4.163586376826089!3d51.90264817190086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c43313c7c8a3e5%3A0x8d1e6c8e6c8e6c8e!2sNobelstraat%2054%2C%203231%20BD%20Brielle!5e0!3m2!1snl!2snl!4v1234567890123!5m2!1snl!2snl" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
+        <!-- Features -->
+        <div class="why__features" id="why-features">
+          <div class="why__feature">
+            <div class="why__feature-icon" aria-hidden="true">&#10022;</div>
+            <span class="why__feature-text">Ervaren en gepassioneerde barbers</span>
+          </div>
+          <div class="why__feature">
+            <div class="why__feature-icon" aria-hidden="true">&#9671;</div>
+            <span class="why__feature-text">Moderne technieken &amp; klassiek vakmanschap</span>
+          </div>
+          <div class="why__feature">
+            <div class="why__feature-icon" aria-hidden="true">&#9632;</div>
+            <span class="why__feature-text">Persoonlijke aandacht voor elk detail</span>
+          </div>
         </div>
-    </section>
 
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-content">
-                <div class="footer-about">
-                    <div class="footer-logo">
-                        <img src="FADEZSTUDIO.png" alt="Fadez Studio Logo">
-                    </div>
-                    <p>Waar vakmanschap en stijl samenkomen. Wij leveren premium kapper diensten met persoonlijke aandacht en moderne technieken.</p>
-                    <div class="footer-social">
-                        <a href="https://www.instagram.com/fadezstudio.nl" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                            </svg>
-                        </a>
-                        <a href="https://www.tiktok.com/@fadezstudio.nl" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
+      </div>
 
-                <div class="footer-column">
-                    <h4>Navigatie</h4>
-                    <ul>
-                        <li><a href="#about">Over ons</a></li>
-                        <li><a href="#portfolio">Portfolio</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
+      <!-- RIGHT: Photo collage -->
+      <div class="why__right" aria-hidden="true">
 
-                <div class="footer-column">
-                    <h4>Services</h4>
-                    <ul>
-                        <li><a href="#about">Knippen</a></li>
-                        <li><a href="#about">Baard</a></li>
-                        <li><a href="#about">Krullenbehandeling</a></li>
-                    </ul>
-                </div>
+        <!-- Decorative ring -->
+        <div class="why__collage-ring"></div>
 
-                <div class="footer-column">
-                    <h4>Contact</h4>
-                    <ul>
-                        <li><a href="tel:+31681826171">+31 681826171</a></li>
-                        <li><a href="mailto:fadezstudio1@outlook.com">fadezstudio1@outlook.com</a></li>
-                        <li>Nobelstraat 54</li>
-                        <li>3231 BD Brielle</li>
-                    </ul>
-                </div>
-            </div>
+        <!-- Accent dots -->
+        <div class="why__collage-dot why__collage-dot--1"></div>
+        <div class="why__collage-dot why__collage-dot--2"></div>
+        <div class="why__collage-dot why__collage-dot--3"></div>
 
-            <div class="footer-bottom">
-                <p>&copy; 2025 Fadez Studio. Alle rechten voorbehouden.</p>
-                <div>
-                    <a href="#">Privacybeleid</a> | <a href="#">Voorwaarden</a>
-                </div>
-            </div>
+        <!-- Main tall photo -->
+        <div class="why__photo why__photo--main" id="why-photo-main">
+          <img
+            src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=600&h=800&fit=crop&q=80"
+            alt="Barber aan het werk"
+            loading="lazy"
+          />
         </div>
-    </footer>
 
-    <script>
-        // Hamburger Menu Toggle
-        const hamburger = document.querySelector('.hamburger');
-        const navMenu = document.querySelector('.nav-menu');
+        <!-- Small top-right photo -->
+        <div class="why__photo why__photo--small" id="why-photo-small">
+          <img
+            src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400&h=360&fit=crop&q=80"
+            alt="Barbershop interieur"
+            loading="lazy"
+          />
+        </div>
 
-        if (hamburger && navMenu) {
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                navMenu.classList.toggle('active');
-            });
+        <!-- Accent bottom-right photo -->
+        <div class="why__photo why__photo--accent" id="why-photo-accent">
+          <img
+            src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=500&h=560&fit=crop&q=80"
+            alt="Premium grooming service"
+            loading="lazy"
+          />
+        </div>
 
-            // Close menu when clicking on a link
-            document.querySelectorAll('.nav-menu a').forEach(link => {
-                link.addEventListener('click', () => {
-                    hamburger.classList.remove('active');
-                    navMenu.classList.remove('active');
-                });
-            });
+      </div>
 
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
-                    hamburger.classList.remove('active');
-                    navMenu.classList.remove('active');
-                }
-            });
+    </div>
+  </section>
+
+  <!-- ============================================================
+       APPOINTMENT / CONTACT SECTION
+  ============================================================ -->
+  <section class="appt" id="appt" aria-labelledby="appt-heading">
+    <div class="appt__inner">
+
+      <!-- LEFT: Info + CTA -->
+      <div class="appt__left">
+        <div>
+          <span class="appt__eyebrow" id="appt-eyebrow">Reserveer je plek</span>
+          <h2 class="appt__heading" id="appt-heading">Maak een<br>Afspraak</h2>
+          <p class="appt__sub" id="appt-sub">Klaar voor een fresh cut? Boek direct online of bel ons voor beschikbaarheid.</p>
+        </div>
+
+        <div class="appt__contacts" id="appt-contacts">
+          <a href="tel:+31681826171" class="appt__contact">
+            <div class="appt__contact-icon" aria-hidden="true">&#128222;</div>
+            <div class="appt__contact-info">
+              <span class="appt__contact-label">Telefoon</span>
+              <span class="appt__contact-value">+31 681 826 171</span>
+            </div>
+          </a>
+          <a href="https://maps.google.com/?q=Nobelstraat+54,Brielle" target="_blank" rel="noopener" class="appt__contact">
+            <div class="appt__contact-icon" aria-hidden="true">&#128205;</div>
+            <div class="appt__contact-info">
+              <span class="appt__contact-label">Locatie</span>
+              <span class="appt__contact-value">Nobelstraat 54, Brielle</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="appt__cta" id="appt-cta">
+          <a href="tel:+31681826171" class="btn btn-primary">Reserveer Nu</a>
+        </div>
+      </div>
+
+      <!-- RIGHT: Hours + Map -->
+      <div class="appt__right">
+
+        <!-- Opening hours -->
+        <div class="appt__hours" id="appt-hours">
+          <p class="appt__hours-title">Openingstijden</p>
+          <div class="appt__hours-row">
+            <span class="appt__hours-day">Maandag</span>
+            <span class="appt__hours-time appt__hours-time--closed">Gesloten</span>
+          </div>
+          <div class="appt__hours-row">
+            <span class="appt__hours-day">Dinsdag t/m Donderdag</span>
+            <span class="appt__hours-time">10:00 – 19:00</span>
+          </div>
+          <div class="appt__hours-row">
+            <span class="appt__hours-day">Vrijdag</span>
+            <span class="appt__hours-time">10:00 – 20:00</span>
+          </div>
+          <div class="appt__hours-row">
+            <span class="appt__hours-day">Zaterdag</span>
+            <span class="appt__hours-time">10:00 – 18:00</span>
+          </div>
+          <div class="appt__hours-row">
+            <span class="appt__hours-day">Zondag</span>
+            <span class="appt__hours-time appt__hours-time--closed">Gesloten</span>
+          </div>
+        </div>
+
+        <!-- Google Maps embed -->
+        <div class="appt__map-wrap" id="appt-map">
+          <iframe
+            src="https://maps.google.com/maps?q=Nobelstraat+54,Brielle,Netherlands&output=embed&z=15&hl=nl"
+            title="Fadez Studio locatie — Nobelstraat 54, Brielle"
+            frameborder="0"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+          <a
+            href="https://maps.google.com/?q=Nobelstraat+54,Brielle"
+            target="_blank"
+            rel="noopener"
+            class="appt__map-link"
+            aria-label="Open in Google Maps"
+          >&#10140;&nbsp;Google Maps</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <script>
+    /* ============================================================
+       GSAP REGISTRATION
+    ============================================================ */
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ============================================================
+       PAGE LOAD MASTER TIMELINE
+    ============================================================ */
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+    // 1. Navbar fade down
+    tl.to('#navbar', {
+      opacity: 1,
+      y: 0,
+      duration: 0.9,
+      ease: 'power2.out'
+    });
+
+    // 2. Eyebrow
+    tl.to('#hero-eyebrow', {
+      opacity: 1,
+      y: 0,
+      duration: 0.7
+    }, '-=0.3');
+
+    // 3. Headline lines staggered
+    tl.to('.hero__headline .line', {
+      opacity: 1,
+      y: 0,
+      stagger: 0.12,
+      duration: 0.85,
+      ease: 'power4.out'
+    }, '-=0.3');
+
+    // 4. Divider
+    tl.to('.hero__divider', {
+      opacity: 1,
+      scaleX: 1,
+      duration: 0.6,
+      ease: 'power2.out'
+    }, '-=0.4');
+
+    // 5. Subtext
+    tl.to('.hero__subtext', {
+      opacity: 1,
+      y: 0,
+      duration: 0.7
+    }, '-=0.3');
+
+    // 6. Buttons
+    tl.to('.hero__buttons', {
+      opacity: 1,
+      y: 0,
+      duration: 0.6
+    }, '-=0.3');
+
+    // 7. Info row
+    tl.to('.hero__info-row', {
+      opacity: 1,
+      y: 0,
+      duration: 0.6
+    }, '-=0.3');
+
+    // 8. Right-side image + ring
+    tl.to(['#visual-portrait', '#visual-ring'], {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 1,
+      stagger: 0.12,
+      ease: 'power3.out'
+    }, '-=0.5');
+
+    // 9. Image label slide up
+    tl.to('#image-label', {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      ease: 'power3.out'
+    }, '-=0.3');
+
+    /* ============================================================
+       SET INITIAL POSITIONS for GSAP TO ANIMATE FROM
+    ============================================================ */
+    gsap.set('.hero__headline .line', { y: 40 });
+    gsap.set('.hero__subtext',        { y: 20 });
+    gsap.set('.hero__buttons',        { y: 20 });
+    gsap.set('.hero__info-row',       { y: 15 });
+    gsap.set('#visual-portrait',      { y: 30, scale: 0.97 });
+    gsap.set('#visual-ring',          { y: 30 });
+    gsap.set('#image-label',          { y: 22 });
+
+    /* ============================================================
+       CONTINUOUS FLOAT ANIMATION (looping)
+    ============================================================ */
+    function floatLoop(el, yAmt, duration, delay) {
+      gsap.to(el, {
+        y: `+=${yAmt}`,
+        duration: duration,
+        delay: delay,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut'
+      });
+    }
+
+    // Gentle float loops on image and ring
+    tl.call(() => {
+      floatLoop('#visual-portrait',  7,  5.0, 0.0);
+      floatLoop('.hero__image-ring', 5,  6.0, 0.0);
+    });
+
+    /* ============================================================
+       PARALLAX ON MOUSE MOVE
+    ============================================================ */
+    const heroSection = document.getElementById('hero');
+    let mouseX = 0, mouseY = 0;
+    let targetX = 0, targetY = 0;
+    let isMoving = false;
+
+    heroSection.addEventListener('mousemove', (e) => {
+      const rect = heroSection.getBoundingClientRect();
+      mouseX = ((e.clientX - rect.left) / rect.width  - 0.5) * 2;
+      mouseY = ((e.clientY - rect.top)  / rect.height - 0.5) * 2;
+      if (!isMoving) {
+        isMoving = true;
+        parallaxTick();
+      }
+    });
+
+    function parallaxTick() {
+      targetX += (mouseX - targetX) * 0.06;
+      targetY += (mouseY - targetY) * 0.06;
+
+      gsap.set('#visual-portrait', {
+        rotationY: targetX * 4,
+        rotationX: -targetY * 3,
+        transformPerspective: 1200
+      });
+
+      gsap.set('.glow-orb--right', {
+        x: targetX * 18,
+        y: targetY * 12
+      });
+
+      gsap.set('.glow-orb--left', {
+        x: targetX * -12,
+        y: targetY * -8
+      });
+
+      if (Math.abs(targetX - mouseX) > 0.001 || Math.abs(targetY - mouseY) > 0.001) {
+        requestAnimationFrame(parallaxTick);
+      } else {
+        isMoving = false;
+      }
+    }
+
+    // Reset on mouse leave
+    heroSection.addEventListener('mouseleave', () => {
+      mouseX = 0; mouseY = 0;
+      gsap.to('#visual-portrait', {
+        rotationY: 0, rotationX: 0,
+        duration: 1.2, ease: 'power2.out'
+      });
+      gsap.to(['.glow-orb--right', '.glow-orb--left'], {
+        x: 0, y: 0, duration: 1.2, ease: 'power2.out'
+      });
+    });
+
+    /* ============================================================
+       NAVBAR SCROLL EFFECT
+    ============================================================ */
+    const navbar = document.getElementById('navbar');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+
+      if (scrollY > 30) {
+        navbar.style.background = 'rgba(6,6,6,0.96)';
+        navbar.style.borderBottomColor = 'rgba(255,255,255,0.14)';
+      } else {
+        navbar.style.background = 'rgba(8,8,8,0.82)';
+        navbar.style.borderBottomColor = 'rgba(255,255,255,0.10)';
+      }
+
+      lastScroll = scrollY;
+    }, { passive: true });
+
+    /* ============================================================
+       MOBILE HAMBURGER MENU
+    ============================================================ */
+    const hamburger   = document.getElementById('hamburger');
+    const mobileMenu  = document.getElementById('mobileMenu');
+    let menuOpen = false;
+
+    hamburger.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      hamburger.classList.toggle('active', menuOpen);
+      mobileMenu.classList.toggle('open', menuOpen);
+      hamburger.setAttribute('aria-expanded', menuOpen.toString());
+    });
+
+    // Close on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        menuOpen = false;
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (menuOpen && !navbar.contains(e.target)) {
+        menuOpen = false;
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    /* ============================================================
+       BUTTON HOVER — MAGNETIC EFFECT (subtle)
+    ============================================================ */
+    document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width  - 0.5) * 10;
+        const y = ((e.clientY - rect.top)  / rect.height - 0.5) * 6;
+        gsap.to(btn, { x, y, duration: 0.3, ease: 'power2.out' });
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' });
+      });
+    });
+
+    /* ============================================================
+       ABOUT SECTION — SCROLL ANIMATIONS
+    ============================================================ */
+    const aboutReveal = (el, fromY = 30, delay = 0) => {
+      gsap.fromTo(el,
+        { opacity: 0, y: fromY },
+        {
+          opacity: 1, y: 0,
+          duration: 0.85,
+          delay,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 88%',
+            toggleActions: 'play none none none'
+          }
         }
+      );
+    };
 
-        // Scroll Reveal Animation
-        const animatedElements = document.querySelectorAll(
-            'section h1, section h2, section h3, section p, section .hero-image, section .about-text, section .pricing-section, section .pricing-item, section .gallery-item, section .gallery-content, section .booking-item, section .booking-cta, section .booking-map, footer .footer-about, footer .footer-column'
-        );
+    aboutReveal('#about-since',    20, 0);
+    aboutReveal('#about-heading',  30, 0.08);
+    aboutReveal('#about-divider',  10, 0.18);
+    aboutReveal('#about-text',     20, 0.26);
+    aboutReveal('#pricing-label',  20, 0);
+    aboutReveal('#pricing-heading',25, 0.08);
+    aboutReveal('#pricing-list',   30, 0.18);
+    aboutReveal('#pricing-note',   15, 0.32);
 
-        animatedElements.forEach((el, index) => {
-            el.classList.add('reveal');
-            el.style.setProperty('--delay', `${(index % 7) * 70}ms`);
-        });
+    /* ============================================================
+       WHY SECTION — SCROLL ANIMATIONS
+    ============================================================ */
+    aboutReveal('#why-eyebrow',  20, 0);
+    aboutReveal('#why-heading',  30, 0.08);
+    aboutReveal('#why-sub',      20, 0.16);
+    aboutReveal('#why-quote',    25, 0.24);
+    aboutReveal('#why-features', 30, 0.34);
 
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Photos stagger in
+    gsap.fromTo('#why-photo-main',
+      { opacity: 0, y: 50, x: -20 },
+      { opacity: 1, y: 0, x: 0, duration: 1, ease: 'power3.out',
+        scrollTrigger: { trigger: '#why-photo-main', start: 'top 85%' } }
+    );
+    gsap.fromTo('#why-photo-small',
+      { opacity: 0, y: -30, x: 20 },
+      { opacity: 1, y: 0, x: 0, duration: 0.9, delay: 0.15, ease: 'power3.out',
+        scrollTrigger: { trigger: '#why-photo-main', start: 'top 85%' } }
+    );
+    gsap.fromTo('#why-photo-accent',
+      { opacity: 0, y: 40, x: 20 },
+      { opacity: 1, y: 0, x: 0, duration: 1, delay: 0.28, ease: 'power3.out',
+        scrollTrigger: { trigger: '#why-photo-main', start: 'top 85%' } }
+    );
 
-        if (prefersReducedMotion) {
-            animatedElements.forEach((el) => el.classList.add('is-visible'));
-        } else {
-            const revealObserver = new IntersectionObserver(
-                (entries, observer) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('is-visible');
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                },
-                {
-                    threshold: 0.08,
-                    rootMargin: '0px 0px -20px 0px'
-                }
-            );
+    // Feature items stagger in individually
+    gsap.fromTo('.why__feature',
+      { opacity: 0, x: -18 },
+      { opacity: 1, x: 0, stagger: 0.08, duration: 0.6, ease: 'power3.out',
+        scrollTrigger: { trigger: '#why-features', start: 'top 88%' } }
+    );
 
-            animatedElements.forEach((el) => revealObserver.observe(el));
-        }
-    </script>
+    /* ============================================================
+       APPOINTMENT SECTION — SCROLL ANIMATIONS
+    ============================================================ */
+    aboutReveal('#appt-eyebrow',  20, 0);
+    aboutReveal('#appt-heading',  30, 0.08);
+    aboutReveal('#appt-sub',      20, 0.16);
+    aboutReveal('#appt-contacts', 25, 0.24);
+    aboutReveal('#appt-cta',      20, 0.34);
+    aboutReveal('#appt-hours',    25, 0.08);
+    aboutReveal('#appt-map',      30, 0.20);
+  </script>
 
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__watermark" aria-hidden="true">FADEZ</div>
+
+    <div class="footer__inner">
+      <div class="footer__grid">
+
+        <!-- Brand -->
+        <div class="footer__brand">
+          <a href="#hero" class="footer__logo" aria-label="Fadez Studio - Home">
+            <img src="fadezstudio.png" alt="Fadez Studio" />
+          </a>
+          <p class="footer__tagline">Premium barbershop in het hart van Brielle. Vakmanschap, stijl en persoonlijke aandacht — sinds 2025.</p>
+          <div class="footer__socials">
+            <!-- Instagram -->
+            <a href="https://www.instagram.com/fadezstudio.nl" target="_blank" rel="noopener" class="footer__social" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <circle cx="12" cy="12" r="4.5"/>
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+            </a>
+            <!-- TikTok -->
+            <a href="https://www.tiktok.com/@fadezstudio.nl" target="_blank" rel="noopener" class="footer__social" aria-label="TikTok">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.77a4.85 4.85 0 0 1-1.01-.08z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Navigatie -->
+        <div class="footer__col">
+          <p class="footer__col-title">Navigatie</p>
+          <ul class="footer__links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#about">Over Ons</a></li>
+            <li><a href="#why">Waarom Fadez</a></li>
+            <li><a href="#appt">Afspraak</a></li>
+          </ul>
+        </div>
+
+        <!-- Diensten -->
+        <div class="footer__col">
+          <p class="footer__col-title">Diensten</p>
+          <ul class="footer__links">
+            <li><a href="#about">Knippen</a></li>
+            <li><a href="#about">Knippen + Baard</a></li>
+            <li><a href="#about">Permanent Krullen</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div class="footer__col">
+          <p class="footer__col-title">Contact</p>
+          <ul class="footer__links">
+            <li><a href="tel:+31681826171">+31 681 826 171</a></li>
+            <li><a href="https://maps.google.com/?q=Nobelstraat+54,Brielle" target="_blank" rel="noopener">Nobelstraat 54, Brielle</a></li>
+            <li><a href="#appt">Reserveer Nu</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="footer__bottom">
+        <p class="footer__copy">&copy; 2025 Fadez Studio. Alle rechten voorbehouden.</p>
+        <nav class="footer__legal" aria-label="Juridisch">
+          <a href="#">Privacybeleid</a>
+          <a href="#">Cookiebeleid</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
