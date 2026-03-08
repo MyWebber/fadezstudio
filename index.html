@@ -1735,7 +1735,7 @@
       .why__right   { height: 360px; }
       .why__photo--main   { width: 200px; height: 280px; left: 0; top: 0; }
       .why__photo--accent { width: 160px; height: 210px; right: 0; bottom: 0; }
-      .why__photo--small  { display: none; }
+      .why__photo--small  { width: 130px; height: 170px; top: 40px; right: 20px; }
 
       .appt__inner  { grid-template-columns: 1fr; gap: var(--space-2xl); }
     }
@@ -1773,10 +1773,24 @@
       .appt  { padding: var(--space-2xl) var(--space-lg); }
       .appt__map-wrap { height: 220px; }
 
-      /* Why collage — fix within bounded container */
-      .why__right { height: 300px; overflow: hidden; }
-      .why__photo--main   { width: 170px; height: 240px; left: 0; top: 0; }
-      .why__photo--accent { width: 140px; height: 185px; right: 0; bottom: 0; }
+      /* Why collage — 3 foto's als flex-rij op mobiel */
+      .why__right {
+        height: auto;
+        display: flex;
+        gap: 10px;
+        align-items: stretch;
+        overflow: visible;
+      }
+      .why__photo {
+        position: relative;
+        flex: 1;
+        height: 220px;
+        top: auto; left: auto; right: auto; bottom: auto;
+        width: auto !important;
+      }
+      .why__photo--small { display: block; }
+      .why__collage-ring,
+      .why__collage-dot { display: none; }
 
       /* ---- Centre all section text on mobile ---- */
       .about__left,
@@ -1833,9 +1847,8 @@
       .pricing__item-num { font-size: 0.85rem; }
 
       .why { padding: var(--space-xl) var(--space-md); }
-      .why__right { height: 260px; }
-      .why__photo--main   { width: 145px; height: 200px; }
-      .why__photo--accent { width: 120px; height: 160px; }
+      .why__right { gap: 8px; }
+      .why__photo { height: 185px; }
       .why__quote { padding: 20px 18px; }
 
       .appt { padding: var(--space-xl) var(--space-md); }
@@ -1858,9 +1871,8 @@
       .hero__buttons .btn-primary,
       .hero__buttons .btn-secondary { font-size: 0.75rem; padding: 13px 16px; }
 
-      .why__right { height: 230px; }
-      .why__photo--main   { width: 125px; height: 175px; }
-      .why__photo--accent { width: 105px; height: 140px; }
+      .why__right { gap: 6px; }
+      .why__photo { height: 155px; }
 
       .appt__contact { padding: 14px 12px; }
       .footer__legal { gap: 14px; flex-wrap: wrap; }
