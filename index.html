@@ -1464,6 +1464,54 @@
       font-style: italic;
     }
 
+    /* Out-of-hours CTA */
+    .appt__oooh {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg) var(--space-xl);
+      margin-top: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .appt__oooh-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: var(--space-xs);
+    }
+
+    .appt__oooh-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .appt__oooh-text a {
+      color: var(--text-primary);
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-gold);
+      transition: border-color var(--duration-sm) var(--ease-luxury);
+    }
+
+    .appt__oooh-text a:hover {
+      border-color: var(--gold-primary);
+    }
+
+    .appt__oooh-note {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.80rem;
+      color: var(--text-muted);
+      margin-top: var(--space-xs);
+    }
+
     /* Map */
     .appt__map-wrap {
       border-radius: var(--radius-xl);
@@ -2063,7 +2111,7 @@
               <span class="pricing__item-name">Knippen</span>
               <span class="pricing__item-dots" aria-hidden="true"></span>
             </div>
-            <span class="pricing__item-price">&euro;&thinsp;28</span>
+            <span class="pricing__item-price">&euro;&thinsp;25</span>
           </li>
           <li class="pricing__item">
             <span class="pricing__item-num">02</span>
@@ -2071,7 +2119,15 @@
               <span class="pricing__item-name">Knippen + Baard</span>
               <span class="pricing__item-dots" aria-hidden="true"></span>
             </div>
-            <span class="pricing__item-price">&euro;&thinsp;33</span>
+            <span class="pricing__item-price">&euro;&thinsp;30</span>
+          </li>
+          <li class="pricing__item">
+            <span class="pricing__item-num">03</span>
+            <div class="pricing__item-body">
+              <span class="pricing__item-name">Permanent Krullenbehandeling</span>
+              <span class="pricing__item-dots" aria-hidden="true"></span>
+            </div>
+            <span class="pricing__item-price">&euro;&thinsp;50</span>
           </li>
         </ul>
         <p class="pricing__note" id="pricing-note">Wij knippen geen kinderen onder de 8 jaar</p>
@@ -2229,6 +2285,18 @@
             <span class="appt__hours-day">Zondag</span>
             <span class="appt__hours-time appt__hours-time--closed">Gesloten</span>
           </div>
+        </div>
+
+        <!-- Out-of-hours call-to-action -->
+        <div class="appt__oooh">
+          <p class="appt__oooh-title">Buiten openingstijden</p>
+          <p class="appt__oooh-text">
+            Kun je geen geschikt tijdstip vinden binnen onze openingstijden, maar wil je graag voor of na sluitingstijd geknipt worden?
+            Stuur dan een WhatsApp-bericht naar
+            <a href="https://wa.me/31681826171" target="_blank" rel="noopener">0681826171</a>
+            om de mogelijkheid te bespreken.
+          </p>
+          <p class="appt__oooh-note">Afspraken buiten onze reguliere openingstijden zijn mogelijk tegen een toeslag van +&nbsp;€5 op het normale tarief.</p>
         </div>
 
         <!-- Google Maps embed -->
