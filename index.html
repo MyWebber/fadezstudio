@@ -1029,6 +1029,32 @@
       flex-shrink: 0;
     }
 
+    /* Prominent price-increase alert */
+    .pricing__alert {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      background: var(--text-primary);
+      color: #FFFFFF;
+      border-radius: var(--radius-md);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-sm) 0 var(--space-md);
+    }
+
+    .pricing__alert-icon {
+      font-size: 1.1rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .pricing__alert-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.5;
+      color: #FFFFFF;
+    }
+
     /* ---- Responsive about ---- */
     /* about responsive handled in master block below */
 
@@ -2104,6 +2130,13 @@
       <div class="about__right">
         <span class="pricing__label" id="pricing-label">Prijzenlijst</span>
         <h3 class="pricing__heading" id="pricing-heading">Onze diensten</h3>
+
+        <!-- Price increase notice -->
+        <div class="pricing__alert" id="pricing-alert">
+          <span class="pricing__alert-icon" aria-hidden="true">&#9888;</span>
+          <p class="pricing__alert-text">Let op: onze prijzen stijgen binnenkort met &euro;2 per behandeling.</p>
+        </div>
+
         <ul class="pricing__list" id="pricing-list" role="list">
           <li class="pricing__item">
             <span class="pricing__item-num">01</span>
@@ -2111,7 +2144,7 @@
               <span class="pricing__item-name">Knippen</span>
               <span class="pricing__item-dots" aria-hidden="true"></span>
             </div>
-            <span class="pricing__item-price">&euro;&thinsp;25</span>
+            <span class="pricing__item-price">&euro;&thinsp;28</span>
           </li>
           <li class="pricing__item">
             <span class="pricing__item-num">02</span>
@@ -2119,7 +2152,7 @@
               <span class="pricing__item-name">Knippen + Baard</span>
               <span class="pricing__item-dots" aria-hidden="true"></span>
             </div>
-            <span class="pricing__item-price">&euro;&thinsp;30</span>
+            <span class="pricing__item-price">&euro;&thinsp;33</span>
           </li>
           <li class="pricing__item">
             <span class="pricing__item-num">03</span>
@@ -2131,6 +2164,18 @@
           </li>
         </ul>
         <p class="pricing__note" id="pricing-note">Wij knippen geen kinderen onder de 8 jaar</p>
+
+        <!-- Out-of-hours call-to-action -->
+        <div class="appt__oooh">
+          <p class="appt__oooh-title">Buiten openingstijden</p>
+          <p class="appt__oooh-text">
+            Kun je geen geschikt tijdstip vinden binnen onze openingstijden, maar wil je graag voor of na sluitingstijd geknipt worden?
+            Stuur dan een WhatsApp-bericht naar
+            <a href="https://wa.me/31681826171" target="_blank" rel="noopener">0681826171</a>
+            om de mogelijkheid te bespreken.
+          </p>
+          <p class="appt__oooh-note">Afspraken buiten onze reguliere openingstijden zijn mogelijk tegen een toeslag van +&nbsp;€5 op het normale tarief.</p>
+        </div>
       </div>
 
     </div>
@@ -2285,18 +2330,6 @@
             <span class="appt__hours-day">Zondag</span>
             <span class="appt__hours-time appt__hours-time--closed">Gesloten</span>
           </div>
-        </div>
-
-        <!-- Out-of-hours call-to-action -->
-        <div class="appt__oooh">
-          <p class="appt__oooh-title">Buiten openingstijden</p>
-          <p class="appt__oooh-text">
-            Kun je geen geschikt tijdstip vinden binnen onze openingstijden, maar wil je graag voor of na sluitingstijd geknipt worden?
-            Stuur dan een WhatsApp-bericht naar
-            <a href="https://wa.me/31681826171" target="_blank" rel="noopener">0681826171</a>
-            om de mogelijkheid te bespreken.
-          </p>
-          <p class="appt__oooh-note">Afspraken buiten onze reguliere openingstijden zijn mogelijk tegen een toeslag van +&nbsp;€5 op het normale tarief.</p>
         </div>
 
         <!-- Google Maps embed -->
@@ -2588,8 +2621,9 @@
     aboutReveal('#about-text',     20, 0.26);
     aboutReveal('#pricing-label',  20, 0);
     aboutReveal('#pricing-heading',25, 0.08);
-    aboutReveal('#pricing-list',   30, 0.18);
-    aboutReveal('#pricing-note',   15, 0.32);
+    aboutReveal('#pricing-alert',  20, 0.14);
+    aboutReveal('#pricing-list',   30, 0.20);
+    aboutReveal('#pricing-note',   15, 0.34);
 
     /* ============================================================
        WHY SECTION — SCROLL ANIMATIONS
