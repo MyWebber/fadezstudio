@@ -1029,32 +1029,6 @@
       flex-shrink: 0;
     }
 
-    /* Prominent price-increase alert */
-    .pricing__alert {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--space-sm);
-      background: var(--text-primary);
-      color: #FFFFFF;
-      border-radius: var(--radius-md);
-      padding: var(--space-md) var(--space-lg);
-      margin: var(--space-sm) 0 var(--space-md);
-    }
-
-    .pricing__alert-icon {
-      font-size: 1.1rem;
-      line-height: 1;
-      flex-shrink: 0;
-    }
-
-    .pricing__alert-text {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 600;
-      line-height: 1.5;
-      color: #FFFFFF;
-    }
-
     /* ---- Responsive about ---- */
     /* about responsive handled in master block below */
 
@@ -2131,12 +2105,6 @@
         <span class="pricing__label" id="pricing-label">Prijzenlijst</span>
         <h3 class="pricing__heading" id="pricing-heading">Onze diensten</h3>
 
-        <!-- Price increase notice -->
-        <div class="pricing__alert" id="pricing-alert">
-          <span class="pricing__alert-icon" aria-hidden="true">&#9888;</span>
-          <p class="pricing__alert-text">Let op: onze prijzen stijgen binnenkort met &euro;2 per behandeling.</p>
-        </div>
-
         <ul class="pricing__list" id="pricing-list" role="list">
           <li class="pricing__item">
             <span class="pricing__item-num">01</span>
@@ -2144,7 +2112,7 @@
               <span class="pricing__item-name">Knippen</span>
               <span class="pricing__item-dots" aria-hidden="true"></span>
             </div>
-            <span class="pricing__item-price">&euro;&thinsp;28</span>
+            <span class="pricing__item-price">&euro;&thinsp;30</span>
           </li>
           <li class="pricing__item">
             <span class="pricing__item-num">02</span>
@@ -2152,7 +2120,7 @@
               <span class="pricing__item-name">Knippen + Baard</span>
               <span class="pricing__item-dots" aria-hidden="true"></span>
             </div>
-            <span class="pricing__item-price">&euro;&thinsp;33</span>
+            <span class="pricing__item-price">&euro;&thinsp;35</span>
           </li>
           <li class="pricing__item">
             <span class="pricing__item-num">03</span>
@@ -2160,7 +2128,7 @@
               <span class="pricing__item-name">Permanent Krullenbehandeling</span>
               <span class="pricing__item-dots" aria-hidden="true"></span>
             </div>
-            <span class="pricing__item-price">&euro;&thinsp;50</span>
+            <span class="pricing__item-price">&euro;&thinsp;52</span>
           </li>
         </ul>
         <p class="pricing__note" id="pricing-note">Wij knippen geen kinderen onder de 8 jaar</p>
@@ -2621,7 +2589,6 @@
     aboutReveal('#about-text',     20, 0.26);
     aboutReveal('#pricing-label',  20, 0);
     aboutReveal('#pricing-heading',25, 0.08);
-    aboutReveal('#pricing-alert',  20, 0.14);
     aboutReveal('#pricing-list',   30, 0.20);
     aboutReveal('#pricing-note',   15, 0.34);
 
